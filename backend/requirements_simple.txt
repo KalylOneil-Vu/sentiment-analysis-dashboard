@@ -1,0 +1,19 @@
+# Simple version - works with Python 3.13
+# Core web framework
+fastapi==0.119.1
+uvicorn[standard]==0.38.0
+websockets==15.0.1
+python-multipart==0.0.20
+
+# Basic computer vision (works with 3.13)
+opencv-python==4.12.0.88
+numpy==2.2.6
+Pillow==12.0.0
+
+# Utilities
+python-dotenv==1.1.1
+pydantic==2.12.3
+pydantic-settings==2.11.0
+
+# Note: Advanced ML features (MediaPipe, DeepFace, Whisper) require Python 3.11 or lower
+# This simplified version provides basic functionality
