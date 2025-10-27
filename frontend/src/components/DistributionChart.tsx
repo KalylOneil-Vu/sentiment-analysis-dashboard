@@ -5,6 +5,20 @@ interface DistributionChartProps {
 }
 
 export default function DistributionChart({ engagement }: DistributionChartProps) {
+  // Add null check for distribution
+  if (!engagement?.distribution) {
+    return (
+      <div className="bg-zinc-900/40 border border-zinc-800/50 rounded-lg overflow-hidden backdrop-blur-sm">
+        <div className="px-4 py-2.5 bg-zinc-900/60 border-b border-zinc-800/50">
+          <h2 className="text-xs font-semibold tracking-wide text-zinc-300">Engagement Distribution</h2>
+        </div>
+        <div className="p-4 text-center text-zinc-500 text-xs">
+          No distribution data available
+        </div>
+      </div>
+    );
+  }
+
   const { distribution } = engagement;
   const { percentages } = distribution;
 
@@ -87,10 +101,10 @@ export default function DistributionChart({ engagement }: DistributionChartProps
                 <div className="w-20 h-1.5 bg-zinc-800/50 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-emerald-500 transition-all duration-700"
-                    style={{ width: `${engagement.averages.emotion * 100}%` }}
+                    style={{ width: `${(engagement.averages?.emotion || 0) * 100}%` }}
                   ></div>
                 </div>
-                <span className="font-semibold text-xs text-zinc-200 w-10 text-right">{Math.round(engagement.averages.emotion * 100)}%</span>
+                <span className="font-semibold text-xs text-zinc-200 w-10 text-right">{Math.round((engagement.averages?.emotion || 0) * 100)}%</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -99,10 +113,10 @@ export default function DistributionChart({ engagement }: DistributionChartProps
                 <div className="w-20 h-1.5 bg-zinc-800/50 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-emerald-500 transition-all duration-700"
-                    style={{ width: `${engagement.averages.body_language * 100}%` }}
+                    style={{ width: `${(engagement.averages?.body_language || 0) * 100}%` }}
                   ></div>
                 </div>
-                <span className="font-semibold text-xs text-zinc-200 w-10 text-right">{Math.round(engagement.averages.body_language * 100)}%</span>
+                <span className="font-semibold text-xs text-zinc-200 w-10 text-right">{Math.round((engagement.averages?.body_language || 0) * 100)}%</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -111,10 +125,10 @@ export default function DistributionChart({ engagement }: DistributionChartProps
                 <div className="w-20 h-1.5 bg-zinc-800/50 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-emerald-500 transition-all duration-700"
-                    style={{ width: `${engagement.averages.speech * 100}%` }}
+                    style={{ width: `${(engagement.averages?.speech || 0) * 100}%` }}
                   ></div>
                 </div>
-                <span className="font-semibold text-xs text-zinc-200 w-10 text-right">{Math.round(engagement.averages.speech * 100)}%</span>
+                <span className="font-semibold text-xs text-zinc-200 w-10 text-right">{Math.round((engagement.averages?.speech || 0) * 100)}%</span>
               </div>
             </div>
           </div>

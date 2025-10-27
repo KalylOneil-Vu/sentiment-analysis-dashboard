@@ -35,7 +35,7 @@ export default function Dashboard({ engagement, fastvlmText }: DashboardProps) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <EngagementScore score={engagement.overall_score} />
+        <EngagementScore score={engagement.overall_score || 0} />
       </motion.div>
 
       {/* Metrics Overview - Right Top */}
@@ -84,7 +84,7 @@ export default function Dashboard({ engagement, fastvlmText }: DashboardProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.4 }}
       >
-        <ParticipantsList persons={engagement.persons} />
+        <ParticipantsList persons={engagement.persons || []} />
       </motion.div>
     </div>
   );

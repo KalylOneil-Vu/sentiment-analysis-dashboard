@@ -5,7 +5,7 @@ interface ParticipantsListProps {
 }
 
 export default function ParticipantsList({ persons }: ParticipantsListProps) {
-  if (persons.length === 0) {
+  if (!persons || persons.length === 0) {
     return (
       <div className="bg-zinc-950 border border-zinc-800 rounded p-8 text-center">
         <div className="text-zinc-600 text-xs uppercase tracking-wider">
