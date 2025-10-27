@@ -1,8 +1,10 @@
+import { motion } from 'framer-motion';
 import { RoomEngagement } from '../types';
 import EngagementScore from './EngagementScore';
 import ParticipantsList from './ParticipantsList';
 import DistributionChart from './DistributionChart';
 import MetricsOverview from './MetricsOverview';
+import { Loader2 } from 'lucide-react';
 
 interface DashboardProps {
   engagement: RoomEngagement | null;
@@ -12,38 +14,78 @@ interface DashboardProps {
 export default function Dashboard({ engagement, fastvlmText }: DashboardProps) {
   if (!engagement) {
     return (
-      <div className="bg-slate-800 rounded-lg p-8 text-center">
-        <h2 className="text-xl font-semibold mb-2">Waiting for Analysis...</h2>
-        <p className="text-slate-400">
-          Start analysis to begin monitoring engagement metrics
-        </p>
+      <div className="card h-full flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-neutral-600 animate-spin mx-auto mb-4" />
+          <h2 className="text-sm font-semibold mb-1">System Standby</h2>
+          <p className="text-neutral-500 text-xs">
+            Initialize analysis to begin monitoring
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Overall Engagement Score */}
-      <EngagementScore score={engagement.overall_score} />
+    <div className="grid grid-cols-2 gap-4 h-full">
+      {/* Primary Engagement Score - Left Top */}
+      <motion.div
+        className="row-span-2"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <EngagementScore score={engagement.overall_score} />
+      </motion.div>
 
-      {/* FastVLM Context Display */}
+      {/* Metrics Overview - Right Top */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
+        <MetricsOverview engagement={engagement} />
+      </motion.div>
+
+      {/* Distribution Chart - Right Middle */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
+      >
+        <DistributionChart engagement={engagement} />
+      </motion.div>
+
+      {/* FastVLM Intelligence Feed - Bottom Full Width */}
       {fastvlmText && (
-        <div className="bg-slate-800 rounded-lg p-4">
-          <h3 className="text-lg font-semibold mb-3">FastVLM Context</h3>
-          <p className="text-slate-300 italic leading-relaxed">
-            "{fastvlmText}"
-          </p>
-        </div>
+        <motion.div
+          className="col-span-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+        >
+          <div className="card">
+            <div className="card-header">
+              <h3 className="text-sm font-semibold">AI Visual Analysis</h3>
+            </div>
+            <div className="card-body">
+              <p className="text-neutral-300 text-sm leading-relaxed">
+                {fastvlmText}
+              </p>
+            </div>
+          </div>
+        </motion.div>
       )}
 
-      {/* Metrics Overview */}
-      <MetricsOverview engagement={engagement} />
-
-      {/* Distribution Chart */}
-      <DistributionChart engagement={engagement} />
-
-      {/* Participants List */}
-      <ParticipantsList persons={engagement.persons} />
+      {/* Participants List - Bottom Full Width */}
+      <motion.div
+        className="col-span-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.4 }}
+      >
+        <ParticipantsList persons={engagement.persons} />
+      </motion.div>
     </div>
   );
 }

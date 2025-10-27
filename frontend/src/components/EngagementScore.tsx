@@ -1,69 +1,106 @@
+import { motion } from 'framer-motion';
+import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
+
 interface EngagementScoreProps {
   score: number;
 }
 
 export default function EngagementScore({ score }: EngagementScoreProps) {
   const percentage = Math.round(score * 100);
+  const radius = 90;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
-  const getScoreColor = (score: number) => {
-    if (score >= 0.7) return 'text-green-500';
-    if (score >= 0.4) return 'text-yellow-500';
-    return 'text-red-500';
+  const getScoreColor = () => {
+    if (score >= 0.7) return '#22c55e'; // green
+    if (score >= 0.4) return '#f59e0b'; // amber
+    return '#ef4444'; // red
   };
 
-  const getScoreLabel = (score: number) => {
-    if (score >= 0.7) return 'Highly Engaged';
-    if (score >= 0.4) return 'Moderately Engaged';
-    return 'Low Engagement';
+  const getStatus = () => {
+    if (score >= 0.7) return { text: 'Excellent', icon: TrendingUp };
+    if (score >= 0.4) return { text: 'Moderate', icon: Activity };
+    return { text: 'Low', icon: TrendingDown };
   };
 
-  const getBackgroundColor = (score: number) => {
-    if (score >= 0.7) return 'from-green-900/50 to-green-800/30';
-    if (score >= 0.4) return 'from-yellow-900/50 to-yellow-800/30';
-    return 'from-red-900/50 to-red-800/30';
-  };
+  const status = getStatus();
+  const StatusIcon = status.icon;
 
   return (
-    <div className={`bg-gradient-to-br ${getBackgroundColor(score)} rounded-lg p-6 border border-slate-700`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-sm font-medium text-slate-400 uppercase mb-2">Overall Engagement</h2>
-          <div className="flex items-baseline gap-3">
-            <span className={`text-5xl font-bold ${getScoreColor(score)}`}>
-              {percentage}%
-            </span>
-            <span className="text-lg text-slate-400">{getScoreLabel(score)}</span>
-          </div>
+    <div className="card h-full flex flex-col">
+      <div className="card-header flex items-center justify-between">
+        <h2 className="text-sm font-semibold">Overall Engagement</h2>
+        <div className="flex items-center gap-2">
+          <StatusIcon className="w-4 h-4" style={{ color: getScoreColor() }} />
+          <span className="text-xs font-medium" style={{ color: getScoreColor() }}>
+            {status.text}
+          </span>
         </div>
+      </div>
 
-        {/* Circular Progress Indicator */}
-        <div className="relative w-24 h-24">
-          <svg className="w-24 h-24 transform -rotate-90">
+      <div className="card-body flex-1 flex items-center justify-center">
+        <div className="relative">
+          {/* Circular Progress */}
+          <svg className="w-48 h-48 transform -rotate-90">
+            {/* Background Circle */}
             <circle
-              cx="48"
-              cy="48"
-              r="40"
+              cx="96"
+              cy="96"
+              r={radius}
               stroke="currentColor"
-              strokeWidth="8"
+              strokeWidth="12"
               fill="none"
-              className="text-slate-700"
+              className="text-neutral-800"
             />
-            <circle
-              cx="48"
-              cy="48"
-              r="40"
-              stroke="currentColor"
-              strokeWidth="8"
+
+            {/* Progress Circle */}
+            <motion.circle
+              cx="96"
+              cy="96"
+              r={radius}
+              stroke={getScoreColor()}
+              strokeWidth="12"
               fill="none"
-              strokeDasharray={`${2 * Math.PI * 40}`}
-              strokeDashoffset={`${2 * Math.PI * 40 * (1 - score)}`}
-              className={getScoreColor(score)}
               strokeLinecap="round"
+              strokeDasharray={circumference}
+              initial={{ strokeDashoffset: circumference }}
+              animate={{ strokeDashoffset }}
+              transition={{ duration: 1, ease: "easeInOut" }}
             />
           </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className={`text-xl font-bold ${getScoreColor(score)}`}>{percentage}</span>
+
+          {/* Center Text */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <motion.div
+              className="text-5xl font-bold"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              {percentage}%
+            </motion.div>
+            <div className="text-xs text-neutral-400 font-medium mt-1">
+              Engagement Score
+            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="px-6 pb-6">
+        <div className="h-2 bg-neutral-800 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full rounded-full"
+            style={{ backgroundColor: getScoreColor() }}
+            initial={{ width: 0 }}
+            animate={{ width: `${percentage}%` }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+          />
+        </div>
+        <div className="flex justify-between mt-2 text-[10px] text-neutral-500">
+          <span>0%</span>
+          <span>50%</span>
+          <span>100%</span>
         </div>
       </div>
     </div>

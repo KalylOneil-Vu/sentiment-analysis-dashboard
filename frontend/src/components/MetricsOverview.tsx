@@ -10,41 +10,48 @@ export default function MetricsOverview({ engagement }: MetricsOverviewProps) {
 
   const metrics = [
     {
-      label: 'Total Participants',
+      label: 'Total Personnel',
       value: engagement?.total_participants || 0,
-      icon: '👥',
+      unit: 'COUNT',
     },
     {
-      label: 'Active Participants',
+      label: 'Active Units',
       value: engagement?.active_participants || 0,
-      icon: '✅',
+      unit: 'ACTIVE',
     },
     {
-      label: 'Currently Speaking',
+      label: 'Transmitting',
       value: participation.speaking_count,
-      icon: '🎤',
+      unit: 'LIVE',
     },
     {
-      label: 'Participation Rate',
-      value: `${Math.round(participation.participation_rate * 100)}%`,
-      icon: '📊',
+      label: 'Participation Index',
+      value: `${Math.round(participation.participation_rate * 100)}`,
+      unit: 'PCT',
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {metrics.map((metric, index) => (
-        <div
-          key={index}
-          className="bg-slate-800 rounded-lg p-4 border border-slate-700"
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">{metric.icon}</span>
-            <h3 className="text-sm font-medium text-slate-400">{metric.label}</h3>
-          </div>
-          <p className="text-3xl font-bold">{metric.value}</p>
+    <div className="bg-zinc-900/40 border border-zinc-800/50 rounded-lg overflow-hidden backdrop-blur-sm">
+      <div className="px-4 py-2.5 bg-zinc-900/60 border-b border-zinc-800/50">
+        <h2 className="text-xs font-semibold tracking-wide text-zinc-300">Key Metrics</h2>
+      </div>
+      <div className="p-3">
+        <div className="grid grid-cols-2 gap-3">
+          {metrics.map((metric, index) => (
+            <div
+              key={index}
+              className="bg-zinc-900/50 border border-zinc-800/40 rounded-lg p-3"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-[10px] font-medium text-zinc-400 tracking-wide">{metric.label}</h3>
+                <span className="text-[9px] text-zinc-600 font-semibold bg-zinc-800/50 px-1.5 py-0.5 rounded">{metric.unit}</span>
+              </div>
+              <p className="text-3xl font-bold text-zinc-100">{metric.value}</p>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }

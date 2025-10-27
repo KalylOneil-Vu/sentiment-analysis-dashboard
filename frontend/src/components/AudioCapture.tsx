@@ -113,35 +113,44 @@ export default function AudioCapture({ isActive, onAudioData }: AudioCaptureProp
   };
 
   return (
-    <div className="bg-slate-800 rounded-lg p-4">
-      <h2 className="text-lg font-semibold mb-4">Audio Monitor</h2>
-
+    <div className="space-y-3">
+      {/* Audio Level Indicator */}
       <div className="flex items-center gap-3">
-        {/* Microphone Icon */}
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-          isActive ? 'bg-green-500/20 text-green-400' : 'bg-slate-700 text-slate-500'
-        }`}>
-          🎤
+        <div className={`w-8 h-8 border ${
+          isActive ? 'border-emerald-500/50 bg-emerald-500/10' : 'border-zinc-700 bg-zinc-900'
+        } rounded flex items-center justify-center transition-all`}>
+          <div className={`w-3 h-3 rounded-full ${
+            isActive ? 'bg-emerald-500' : 'bg-zinc-600'
+          }`}></div>
         </div>
 
         {/* Audio Level Bar */}
         <div className="flex-1">
-          <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
             <div
-              className="h-full bg-green-500 transition-all duration-100"
+              className="h-full bg-emerald-500 transition-all duration-100"
               style={{ width: `${audioLevel * 100}%` }}
             />
           </div>
-          <p className="text-xs text-slate-400 mt-1">
-            {isActive ? 'Monitoring audio...' : 'Audio monitoring inactive'}
+          <p className="text-[9px] text-zinc-600 mt-1 uppercase tracking-wider font-semibold">
+            {isActive ? 'SIGNAL MONITORING' : 'STANDBY'}
           </p>
+        </div>
+
+        {/* Level Display */}
+        <div className="text-right">
+          <div className="text-sm font-bold font-mono text-zinc-400">{Math.round(audioLevel * 100)}</div>
+          <p className="text-[8px] text-zinc-700 uppercase tracking-wider">DB</p>
         </div>
       </div>
 
+      {/* Active Status */}
       {isActive && audioLevel > 0.3 && (
-        <div className="mt-3 text-sm text-green-400 flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-          Audio detected
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded">
+          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+          <span className="text-[10px] text-emerald-400 uppercase tracking-wider font-semibold">
+            AUDIO DETECTED
+          </span>
         </div>
       )}
     </div>

@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useWebSocket } from './hooks/useWebSocket';
 import { VLMProvider } from './context/VLMContext';
 import Dashboard from './components/Dashboard';
-import VideoCapture from './components/VideoCapture';
 import AudioCapture from './components/AudioCapture';
 import { FastVLMAnalyzer } from './components/FastVLMAnalyzer';
 import { KeywordTags } from './components/KeywordTags';
+import { Activity, Wifi, WifiOff, Play, Square } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 function AppContent() {
   const [clientId] = useState(() => `client-${Date.now()}`);
@@ -84,83 +85,139 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
-      {/* Header */}
-      <header className="bg-slate-800 border-b border-slate-700 p-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Meeting Engagement Monitor</h1>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span className="text-sm">{isConnected ? 'Connected' : 'Disconnected'}</span>
-            </div>
-            {!isAnalyzing ? (
-              <button
-                onClick={startAnalysis}
-                disabled={!hasPermissions}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Start Analysis
-              </button>
-            ) : (
-              <button
-                onClick={stopAnalysis}
-                className="px-6 py-2 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors"
-              >
-                Stop Analysis
-              </button>
-            )}
+    <div className="dashboard-container">
+      {/* Modern Header */}
+      <header className="glass px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Activity className="w-6 h-6 text-emerald-500" />
+          <div>
+            <h1 className="text-lg font-semibold">Engagement Analytics</h1>
+            <p className="text-xs text-neutral-400">Real-time monitoring dashboard</p>
           </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          {/* Connection Status */}
+          <motion.div
+            className="flex items-center gap-2 px-4 py-2 rounded-lg glass-light"
+            animate={{ scale: isConnected ? 1 : 0.95 }}
+            transition={{ duration: 0.2 }}
+          >
+            {isConnected ? (
+              <Wifi className="w-4 h-4 text-emerald-500" />
+            ) : (
+              <WifiOff className="w-4 h-4 text-red-500" />
+            )}
+            <span className="text-sm font-medium">
+              {isConnected ? 'Connected' : 'Disconnected'}
+            </span>
+          </motion.div>
+
+          {/* Control Button */}
+          {!isAnalyzing ? (
+            <button
+              onClick={startAnalysis}
+              disabled={!hasPermissions}
+              className="flex items-center gap-2 px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-700 disabled:opacity-50 text-white rounded-lg transition-all font-medium text-sm"
+            >
+              <Play className="w-4 h-4" />
+              Start Analysis
+            </button>
+          ) : (
+            <button
+              onClick={stopAnalysis}
+              className="flex items-center gap-2 px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all font-medium text-sm"
+            >
+              <Square className="w-4 h-4" />
+              Stop Analysis
+            </button>
+          )}
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto p-6">
+      <main className="flex-1 overflow-hidden">
         {!hasPermissions ? (
-          <div className="bg-slate-800 rounded-lg p-8 text-center">
-            <h2 className="text-xl font-semibold mb-4">Permissions Required</h2>
-            <p className="text-slate-400 mb-4">
-              This application requires access to your camera and microphone to analyze engagement.
-            </p>
-            <p className="text-slate-400">
-              Please allow permissions when prompted by your browser.
-            </p>
-          </div>
+          <motion.div
+            className="h-full flex items-center justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="text-center max-w-md">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl glass flex items-center justify-center">
+                <Activity className="w-10 h-10 text-neutral-600" />
+              </div>
+              <h2 className="text-xl font-semibold mb-3">Permissions Required</h2>
+              <p className="text-neutral-400 text-sm">
+                Please grant camera and microphone permissions to enable real-time engagement monitoring.
+              </p>
+            </div>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Video Feed & FastVLM */}
-            <div className="lg:col-span-1 space-y-6">
-              {/* FastVLM Analyzer */}
-              <div className="bg-slate-800 rounded-lg p-4">
-                <h2 className="text-lg font-semibold mb-4">FastVLM Analysis</h2>
-                <FastVLMAnalyzer
-                  onAnalysisUpdate={handleFastVLMUpdate}
-                  onFrameCapture={handleFrameCapture}
-                  analysisInterval={5000}
-                  isActive={isAnalyzing}
-                />
+          <div className="dashboard-grid">
+            {/* Left Column - Video Feed & Audio */}
+            <motion.div
+              className="col-span-3 flex flex-col gap-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Video Feed Card */}
+              <div className="card flex-1">
+                <div className="card-header">
+                  <h2 className="text-sm font-semibold">Live Video Feed</h2>
+                </div>
+                <div className="card-body">
+                  <FastVLMAnalyzer
+                    onAnalysisUpdate={handleFastVLMUpdate}
+                    onFrameCapture={handleFrameCapture}
+                    analysisInterval={5000}
+                    isActive={isAnalyzing}
+                  />
+                </div>
               </div>
 
-              {/* Keywords Display */}
-              <div className="bg-slate-800 rounded-lg p-4">
-                <h2 className="text-lg font-semibold mb-4">Detected Keywords</h2>
-                <KeywordTags keywords={currentKeywords} />
+              {/* Audio Monitor Card */}
+              <div className="card">
+                <div className="card-header">
+                  <h2 className="text-sm font-semibold">Audio Levels</h2>
+                </div>
+                <div className="card-body">
+                  <AudioCapture
+                    isActive={isAnalyzing}
+                    onAudioData={sendAudio}
+                  />
+                </div>
               </div>
+            </motion.div>
 
-
-              {/* Audio Capture */}
-              <div className="bg-slate-800 rounded-lg p-4">
-                <AudioCapture
-                  isActive={isAnalyzing}
-                  onAudioData={sendAudio}
-                />
-              </div>
-            </div>
-
-            {/* Right Column - Dashboard */}
-            <div className="lg:col-span-2">
+            {/* Center Column - Main Dashboard */}
+            <motion.div
+              className="col-span-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
               <Dashboard engagement={latestEngagement} fastvlmText={fastvlmText} />
-            </div>
+            </motion.div>
+
+            {/* Right Column - Keywords & Insights */}
+            <motion.div
+              className="col-span-3"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="card h-full">
+                <div className="card-header">
+                  <h2 className="text-sm font-semibold">Detected Keywords</h2>
+                </div>
+                <div className="card-body overflow-y-auto scrollbar-hidden">
+                  <KeywordTags keywords={currentKeywords} />
+                </div>
+              </div>
+            </motion.div>
           </div>
         )}
       </main>

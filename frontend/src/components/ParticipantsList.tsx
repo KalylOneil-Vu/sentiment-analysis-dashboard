@@ -7,8 +7,10 @@ interface ParticipantsListProps {
 export default function ParticipantsList({ persons }: ParticipantsListProps) {
   if (persons.length === 0) {
     return (
-      <div className="bg-slate-800 rounded-lg p-6 border border-slate-700 text-center text-slate-400">
-        No participants detected
+      <div className="bg-zinc-950 border border-zinc-800 rounded p-8 text-center">
+        <div className="text-zinc-600 text-xs uppercase tracking-wider">
+          No personnel detected
+        </div>
       </div>
     );
   }
@@ -17,97 +19,109 @@ export default function ParticipantsList({ persons }: ParticipantsListProps) {
   const sortedPersons = [...persons].sort((a, b) => b.overall_score - a.overall_score);
 
   const getScoreColor = (score: number) => {
-    if (score >= 0.7) return 'text-green-500 bg-green-500/10 border-green-500/30';
-    if (score >= 0.4) return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/30';
-    return 'text-red-500 bg-red-500/10 border-red-500/30';
+    if (score >= 0.7) return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
+    if (score >= 0.4) return 'text-amber-400 bg-amber-500/10 border-amber-500/30';
+    return 'text-red-400 bg-red-500/10 border-red-500/30';
   };
 
-  const getEmotionEmoji = (emotion: string | null) => {
-    if (!emotion) return '😐';
-    const emojiMap: Record<string, string> = {
-      happy: '😊',
-      sad: '😢',
-      angry: '😠',
-      surprise: '😮',
-      fear: '😨',
-      disgust: '🤢',
-      neutral: '😐',
+  const getEmotionLabel = (emotion: string | null) => {
+    if (!emotion) return 'NEUTRAL';
+    return emotion.toUpperCase();
+  };
+
+  const getEmotionColor = (emotion: string | null) => {
+    if (!emotion) return 'text-zinc-500';
+    const colorMap: Record<string, string> = {
+      happy: 'text-emerald-400',
+      sad: 'text-blue-400',
+      angry: 'text-red-400',
+      surprise: 'text-amber-400',
+      fear: 'text-purple-400',
+      disgust: 'text-orange-400',
+      neutral: 'text-zinc-500',
     };
-    return emojiMap[emotion.toLowerCase()] || '😐';
+    return colorMap[emotion.toLowerCase()] || 'text-zinc-500';
   };
 
   return (
-    <div className="bg-slate-800 rounded-lg p-6 border border-slate-700">
-      <h2 className="text-lg font-semibold mb-4">Individual Participants ({persons.length})</h2>
+    <div className="bg-zinc-900/40 border border-zinc-800/50 rounded-lg overflow-hidden backdrop-blur-sm">
+      <div className="px-4 py-2.5 bg-zinc-900/60 border-b border-zinc-800/50 flex items-center justify-between">
+        <h2 className="text-xs font-semibold tracking-wide text-zinc-300">Participants</h2>
+        <span className="text-[10px] text-zinc-500 font-medium">{persons.length} Active</span>
+      </div>
 
-      <div className="space-y-3">
+      <div className="p-3 space-y-2">
         {sortedPersons.map((person) => (
           <div
             key={person.track_id}
-            className={`p-4 rounded-lg border ${getScoreColor(person.overall_score)}`}
+            className={`border ${getScoreColor(person.overall_score)} rounded-lg overflow-hidden`}
           >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">{getEmotionEmoji(person.details.dominant_emotion)}</div>
-                <div>
-                  <h3 className="font-semibold">Person {person.track_id}</h3>
-                  <p className="text-sm text-slate-400">
-                    {person.details.dominant_emotion || 'Unknown emotion'}
-                  </p>
+            <div className="p-3">
+              <div className="flex items-start justify-between mb-2.5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 bg-zinc-900/70 border border-zinc-700/50 rounded-lg flex items-center justify-center">
+                    <span className="text-xs font-bold text-zinc-300">{person.track_id}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-xs text-zinc-100">Participant {person.track_id}</h3>
+                    <p className={`text-[10px] font-medium ${getEmotionColor(person.details.dominant_emotion)}`}>
+                      {getEmotionLabel(person.details.dominant_emotion)}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className={`text-xl font-bold ${getScoreColor(person.overall_score).split(' ')[0]}`}>
+                    {Math.round(person.overall_score * 100)}
+                  </div>
+                  <p className="text-[9px] text-zinc-600 font-medium">Score</p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className={`text-2xl font-bold ${getScoreColor(person.overall_score).split(' ')[0]}`}>
-                  {Math.round(person.overall_score * 100)}%
-                </div>
-                <p className="text-xs text-slate-400">Engagement</p>
-              </div>
-            </div>
 
-            {/* Status Indicators */}
-            <div className="flex flex-wrap gap-2 mb-3">
-              {person.details.is_speaking && (
-                <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full border border-blue-500/30">
-                  🎤 Speaking
-                </span>
-              )}
-              {person.details.arms_raised && (
-                <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded-full border border-purple-500/30">
-                  ✋ Hand Raised
-                </span>
-              )}
-              {person.details.arms_crossed && (
-                <span className="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full border border-orange-500/30">
-                  ❌ Arms Crossed
-                </span>
-              )}
-              {person.details.posture && (
-                <span className="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded-full border border-gray-500/30">
-                  {person.details.posture === 'forward' ? '⬆️ Leaning Forward' :
-                   person.details.posture === 'backward' ? '⬇️ Leaning Back' :
-                   '➡️ Neutral Posture'}
-                </span>
-              )}
-            </div>
+              {/* Status Indicators */}
+              <div className="flex flex-wrap gap-1.5 mb-2.5">
+                {person.details.is_speaking && (
+                  <span className="px-2 py-0.5 bg-blue-500/20 text-blue-300 text-[9px] rounded-md border border-blue-500/30 font-medium">
+                    Speaking
+                  </span>
+                )}
+                {person.details.arms_raised && (
+                  <span className="px-2 py-0.5 bg-purple-500/20 text-purple-300 text-[9px] rounded-md border border-purple-500/30 font-medium">
+                    Hand Raised
+                  </span>
+                )}
+                {person.details.arms_crossed && (
+                  <span className="px-2 py-0.5 bg-orange-500/20 text-orange-300 text-[9px] rounded-md border border-orange-500/30 font-medium">
+                    Arms Crossed
+                  </span>
+                )}
+                {person.details.posture && (
+                  <span className="px-2 py-0.5 bg-zinc-700/20 text-zinc-400 text-[9px] rounded-md border border-zinc-700/30 font-medium">
+                    {person.details.posture === 'forward' ? 'Leaning Forward' :
+                     person.details.posture === 'backward' ? 'Leaning Back' :
+                     'Neutral'}
+                  </span>
+                )}
+              </div>
 
-            {/* Component Scores */}
-            <div className="grid grid-cols-3 gap-2 text-xs">
-              <div>
-                <p className="text-slate-400 mb-1">Emotion</p>
-                <div className="bg-slate-900/50 rounded p-1 text-center font-semibold">
-                  {Math.round(person.component_scores.emotion * 100)}%
+              {/* Component Scores */}
+              <div className="grid grid-cols-3 gap-1.5 text-xs">
+                <div className="bg-zinc-900/50 border border-zinc-800/40 rounded-md p-1.5">
+                  <p className="text-zinc-500 mb-1 text-[9px] font-medium">Emotion</p>
+                  <div className="text-center font-bold text-zinc-100 text-xs">
+                    {Math.round(person.component_scores.emotion * 100)}%
+                  </div>
                 </div>
-              </div>
-              <div>
-                <p className="text-slate-400 mb-1">Body</p>
-                <div className="bg-slate-900/50 rounded p-1 text-center font-semibold">
-                  {Math.round(person.component_scores.body_language * 100)}%
+                <div className="bg-zinc-900/50 border border-zinc-800/40 rounded-md p-1.5">
+                  <p className="text-zinc-500 mb-1 text-[9px] font-medium">Body</p>
+                  <div className="text-center font-bold text-zinc-100 text-xs">
+                    {Math.round(person.component_scores.body_language * 100)}%
+                  </div>
                 </div>
-              </div>
-              <div>
-                <p className="text-slate-400 mb-1">Speech</p>
-                <div className="bg-slate-900/50 rounded p-1 text-center font-semibold">
-                  {Math.round(person.component_scores.speech * 100)}%
+                <div className="bg-zinc-900/50 border border-zinc-800/40 rounded-md p-1.5">
+                  <p className="text-zinc-500 mb-1 text-[9px] font-medium">Speech</p>
+                  <div className="text-center font-bold text-zinc-100 text-xs">
+                    {Math.round(person.component_scores.speech * 100)}%
+                  </div>
                 </div>
               </div>
             </div>

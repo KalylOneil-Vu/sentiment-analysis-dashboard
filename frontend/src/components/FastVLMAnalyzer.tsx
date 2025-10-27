@@ -180,9 +180,9 @@ export const FastVLMAnalyzer: React.FC<FastVLMAnalyzerProps> = ({
           ref={videoRef}
           style={{
             width: '100%',
-            maxWidth: '640px',
-            borderRadius: '8px',
+            borderRadius: '4px',
             backgroundColor: '#000',
+            border: '1px solid #27272a',
           }}
           playsInline
           muted
@@ -202,15 +202,28 @@ export const FastVLMAnalyzer: React.FC<FastVLMAnalyzerProps> = ({
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-              color: 'white',
-              borderRadius: '8px',
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              color: '#a1a1aa',
+              borderRadius: '4px',
             }}
           >
-            <div className="spinner" style={{ marginBottom: '16px' }}>
-              Loading FastVLM...
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-3 h-3 border-2 border-t-emerald-500 border-zinc-700 rounded-full animate-spin"></div>
+              <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                INITIALIZING VISUAL SYSTEM
+              </span>
             </div>
-            {progress && <div style={{ fontSize: '12px' }}>{progress}</div>}
+            {progress && (
+              <div style={{
+                fontSize: '10px',
+                fontFamily: 'monospace',
+                color: '#52525b',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                {progress}
+              </div>
+            )}
           </div>
         )}
 
@@ -226,11 +239,15 @@ export const FastVLMAnalyzer: React.FC<FastVLMAnalyzerProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: 'rgba(255, 0, 0, 0.7)',
-              color: 'white',
-              borderRadius: '8px',
+              backgroundColor: 'rgba(127, 29, 29, 0.9)',
+              color: '#fca5a5',
+              borderRadius: '4px',
               padding: '16px',
               textAlign: 'center',
+              fontSize: '11px',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
             }}
           >
             {error}
@@ -244,14 +261,21 @@ export const FastVLMAnalyzer: React.FC<FastVLMAnalyzerProps> = ({
               position: 'absolute',
               top: '8px',
               right: '8px',
-              backgroundColor: '#22c55e',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
+              backgroundColor: 'rgba(16, 185, 129, 0.2)',
+              color: '#6ee7b7',
+              padding: '4px 10px',
+              borderRadius: '2px',
+              fontSize: '10px',
               fontWeight: 'bold',
+              border: '1px solid rgba(16, 185, 129, 0.4)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
             }}
           >
+            <div style={{ width: '6px', height: '6px', backgroundColor: '#10b981', borderRadius: '50%', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}></div>
             ANALYZING
           </div>
         )}
@@ -261,35 +285,21 @@ export const FastVLMAnalyzer: React.FC<FastVLMAnalyzerProps> = ({
               position: 'absolute',
               top: '8px',
               right: '8px',
-              backgroundColor: '#64748b',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '4px',
-              fontSize: '12px',
+              backgroundColor: 'rgba(63, 63, 70, 0.8)',
+              color: '#a1a1aa',
+              padding: '4px 10px',
+              borderRadius: '2px',
+              fontSize: '10px',
               fontWeight: 'bold',
+              border: '1px solid rgba(82, 82, 91, 0.5)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
             }}
           >
-            READY
+            STANDBY
           </div>
         )}
       </div>
-
-      {/* Current analysis text */}
-      {currentText && (
-        <div
-          style={{
-            marginTop: '16px',
-            padding: '12px',
-            backgroundColor: '#f3f4f6',
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontStyle: 'italic',
-            color: '#374151',
-          }}
-        >
-          <strong>FastVLM:</strong> {currentText}
-        </div>
-      )}
     </div>
   );
 };
