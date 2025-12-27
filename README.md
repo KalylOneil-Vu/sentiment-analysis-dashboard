@@ -1,6 +1,6 @@
-# Sentiment Analysis App for Corporate Meetings
+# Sentiment Analysis Dashboard
 
-A real-time engagement monitoring system that analyzes webcam footage and audio to determine participant engagement levels in corporate meetings and presentations.
+A real-time engagement and sentiment analysis application designed for LED wall displays in headquarters environments. This modern dashboard uses computer vision and natural language processing to monitor room engagement during meetings and presentations.
 
 ## Features
 
