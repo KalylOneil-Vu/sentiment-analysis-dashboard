@@ -8,6 +8,7 @@ import { ActionButtons } from './components/ActionButtons'
 
 interface Scene5SummaryProps {
   onReplay: () => void
+  onVisionHUD?: () => void
 }
 
 const CYCLE_INTERVAL = 4000 // 4 seconds
@@ -18,7 +19,7 @@ const TAKEAWAYS = [
   { text: 'You learned why responsible, ethical implementation is essential.', scene: 'Sensitivity' },
 ]
 
-export function Scene5Summary({ onReplay }: Scene5SummaryProps) {
+export function Scene5Summary({ onReplay, onVisionHUD }: Scene5SummaryProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -113,7 +114,7 @@ export function Scene5Summary({ onReplay }: Scene5SummaryProps) {
 
             {/* Action buttons */}
             <div className="entrance-animate entrance-delay-4">
-              <ActionButtons onReplay={onReplay} />
+              <ActionButtons onReplay={onReplay} onVisionHUD={onVisionHUD} />
             </div>
           </div>
         </div>

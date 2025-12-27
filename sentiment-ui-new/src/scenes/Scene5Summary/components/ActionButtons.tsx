@@ -1,8 +1,9 @@
 interface ActionButtonsProps {
   onReplay: () => void
+  onVisionHUD?: () => void
 }
 
-export function ActionButtons({ onReplay }: ActionButtonsProps) {
+export function ActionButtons({ onReplay, onVisionHUD }: ActionButtonsProps) {
   return (
     <div className="space-y-3">
       {/* Top row - two buttons */}
@@ -35,6 +36,22 @@ export function ActionButtons({ onReplay }: ActionButtonsProps) {
           Our Team
         </button>
       </div>
+
+      {/* Vision HUD button */}
+      {onVisionHUD && (
+        <button
+          onClick={onVisionHUD}
+          className="w-full py-3 rounded-lg text-sm font-medium tracking-[0.12em] uppercase transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+          style={{
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(139, 92, 246, 0.9))',
+            border: '1.5px solid rgba(139, 92, 246, 0.6)',
+            color: '#ffffff',
+            boxShadow: '0 2px 12px rgba(139, 92, 246, 0.3)',
+          }}
+        >
+          🎯 Vision HUD Demo
+        </button>
+      )}
 
       {/* Full-width replay button */}
       <button

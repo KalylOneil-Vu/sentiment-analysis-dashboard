@@ -10,6 +10,7 @@ import { Scene3bHealthcare } from './scenes/Scene3bHealthcare'
 import { Scene3cHighStress } from './scenes/Scene3cHighStress'
 import { Scene4Sensitivity } from './scenes/Scene4Sensitivity'
 import { Scene5Summary } from './scenes/Scene5Summary'
+import { SceneVisionHUD } from './scenes/SceneVisionHUD'
 import { SceneTransition, TransitionType, getBlurScaleClass } from './components/SceneTransition'
 import { CursorGlow } from './components/CursorGlow'
 import { websocketService } from './services/websocket'
@@ -193,10 +194,18 @@ function App() {
         )}
         {displayedScene === 7 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene5Summary onReplay={() => handleSceneChange(0)} />
+            <Scene5Summary
+              onReplay={() => handleSceneChange(0)}
+              onVisionHUD={() => handleSceneChange(8)}
+            />
           </div>
         )}
-        {displayedScene >= 8 && (
+        {displayedScene === 8 && (
+          <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
+            <SceneVisionHUD onBack={() => handleSceneChange(7)} />
+          </div>
+        )}
+        {displayedScene >= 9 && (
           <div
             className={`w-full h-full bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center ${
               getRevealClass()
