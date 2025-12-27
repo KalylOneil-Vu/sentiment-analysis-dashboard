@@ -1,0 +1,68 @@
+import { Scenario } from '../types/scenario'
+
+export const SCENARIOS: Scenario[] = [
+  {
+    id: 'air-traffic',
+    name: 'Air Traffic Control',
+    shortName: 'Air Traffic',
+    description: 'Managing aircraft movements in high-pressure environments',
+    bgGradient: 'linear-gradient(135deg, #64748b 0%, #94a3b8 50%, #cbd5e1 100%)',
+    icon: '✈️',
+  },
+  {
+    id: 'law-enforcement',
+    name: 'Law Enforcement',
+    shortName: 'Law Enforce.',
+    description: 'Public safety and emergency response situations',
+    bgGradient: 'linear-gradient(135deg, #1e3a5f 0%, #3b5998 50%, #6b8cae 100%)',
+    icon: '🚔',
+  },
+  {
+    id: 'call-center',
+    name: 'Call Center',
+    shortName: 'Call Center',
+    description: 'Customer service and support operations',
+    bgGradient: 'linear-gradient(135deg, #059669 0%, #34d399 50%, #6ee7b7 100%)',
+    icon: '📞',
+  },
+  {
+    id: 'first-responders',
+    name: 'First Responders',
+    shortName: 'First Resp.',
+    description: 'Emergency medical and fire response teams',
+    bgGradient: 'linear-gradient(135deg, #dc2626 0%, #f87171 50%, #fca5a5 100%)',
+    icon: '🚑',
+  },
+  {
+    id: 'lineman',
+    name: 'Lineman',
+    shortName: 'Lineman',
+    description: 'Power line maintenance and repair work',
+    bgGradient: 'linear-gradient(135deg, #d97706 0%, #fbbf24 50%, #fde68a 100%)',
+    icon: '⚡',
+  },
+  {
+    id: 'truck-drivers',
+    name: 'Truck Drivers',
+    shortName: 'Truck Driver',
+    description: 'Long-haul transportation and logistics',
+    bgGradient: 'linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #c4b5fd 100%)',
+    icon: '🚛',
+  },
+  {
+    id: 'medical',
+    name: 'Medical',
+    shortName: 'Medical',
+    description: 'Healthcare professionals in clinical settings',
+    bgGradient: 'linear-gradient(135deg, #0891b2 0%, #22d3ee 50%, #67e8f9 100%)',
+    icon: '🏥',
+  },
+  {
+    id: 'infrastructure',
+    name: 'Infrastructure Monitoring',
+    shortName: 'Infrastructure',
+    description: 'Critical systems and facility oversight',
+    bgGradient: 'linear-gradient(135deg, #475569 0%, #64748b 50%, #94a3b8 100%)',
+    icon: '🏗️',
+  },
+]

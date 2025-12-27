@@ -1,0 +1,1141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   THEME CSS VARIABLES
+   ============================================ */
+
+:root {
+  /* Light mode (default) - for ALL scenes */
+  --bg-from: #f8fafc;           /* slate-50 */
+  --bg-to: #f1f5f9;             /* slate-100 */
+  --text-primary: #1e293b;      /* slate-800 */
+  --text-secondary: #475569;    /* slate-600 */
+  --text-muted: #64748b;        /* slate-500 */
+  --text-faint: #94a3b8;        /* slate-400 */
+  --accent: #14b8a6;            /* teal-500 */
+  --accent-strong: #0d9488;     /* teal-600 */
+  --accent-muted: rgba(20, 184, 166, 0.6);
+  --accent-glow: rgba(20, 184, 166, 0.4);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-strong: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(148, 163, 184, 0.2);
+  --grid-line: rgba(148, 163, 184, 0.10);
+  --glow-color: rgba(20, 184, 166, 0.4);
+  --scan-line-color: rgba(20, 184, 166, 0.6);
+  /* Transition wash colors */
+  --wash-center: #ffffff;
+  --wash-mid: #f8fafc;
+  --wash-edge: #f1f5f9;
+}
+
+.dark {
+  /* Dark mode - for ALL scenes */
+  --bg-from: #020617;           /* slate-950 */
+  --bg-to: #0f172a;             /* slate-900 */
+  --text-primary: #e2e8f0;      /* slate-200 */
+  --text-secondary: #cbd5e1;    /* slate-300 */
+  --text-muted: #94a3b8;        /* slate-400 */
+  --text-faint: #64748b;        /* slate-500 */
+  --accent: #67e8f9;            /* cyan-300 */
+  --accent-strong: #22d3ee;     /* cyan-400 */
+  --accent-muted: rgba(103, 232, 249, 0.6);
+  --accent-glow: rgba(103, 232, 249, 0.4);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-strong: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --grid-line: rgba(103, 232, 249, 0.04);
+  --glow-color: rgba(103, 232, 249, 0.4);
+  --scan-line-color: rgba(103, 232, 249, 0.6);
+  /* Transition wash colors */
+  --wash-center: #0f172a;
+  --wash-mid: #0a0f1a;
+  --wash-edge: #020617;
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-to);
+  transition: background-color 300ms ease;
+}
+
+/* Custom scrollbar (hidden) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Selection styles */
+::selection {
+  background: rgba(103, 232, 249, 0.3);
+}
+
+/* Full-screen responsive container */
+.kiosk-frame {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid pattern background - uses accent color */
+.grid-pattern {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Radial glow overlay - uses accent glow color */
+.radial-glow {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 50%,
+    var(--accent-glow) 0%,
+    color-mix(in srgb, var(--accent-glow) 30%, transparent) 40%,
+    transparent 70%
+  );
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+/* Signal node glow */
+.node-glow {
+  box-shadow:
+    0 0 20px var(--glow-color),
+    0 0 40px color-mix(in srgb, var(--glow-color) 50%, transparent),
+    0 0 60px color-mix(in srgb, var(--glow-color) 25%, transparent);
+}
+
+/* Text glow effect - uses accent color */
+.text-glow {
+  text-shadow:
+    0 0 10px var(--accent-glow),
+    0 0 20px color-mix(in srgb, var(--accent-glow) 60%, transparent),
+    0 0 40px color-mix(in srgb, var(--accent-glow) 40%, transparent);
+}
+
+/* Scan line effect */
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--scan-line-color),
+    transparent
+  );
+  animation: scan-line 8s linear infinite;
+}
+
+/* Canvas mirror for natural webcam interaction */
+.canvas-mirror {
+  transform: scaleX(-1);
+}
+
+/* Silhouette glow layers */
+.silhouette-outer {
+  filter: blur(20px);
+  opacity: 0.3;
+}
+
+.silhouette-middle {
+  filter: blur(10px);
+  opacity: 0.5;
+}
+
+.silhouette-inner {
+  filter: blur(4px);
+  opacity: 0.8;
+}
+
+/* HUD corner decorations - uses accent color */
+.hud-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: var(--accent-muted);
+}
+
+.hud-corner-tl {
+  top: 0;
+  left: 0;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.hud-corner-tr {
+  top: 0;
+  right: 0;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+
+.hud-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+
+.hud-corner-br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+/* Breathing animation for silhouette */
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 15px rgba(160, 220, 255, 0.5));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 25px rgba(160, 220, 255, 0.8));
+  }
+}
+
+.breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.fade-in-delay-1 {
+  animation: fadeIn 1s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.fade-in-delay-2 {
+  animation: fadeIn 1s ease-out 0.6s forwards;
+  opacity: 0;
+}
+
+/* Float animation for signal nodes */
+@keyframes float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -35px, 0);
+  }
+}
+
+/* Signal node styling - uses CSS variables for dynamic glow */
+.signal-node {
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--accent) calc(var(--glow-intensity, 0.5) * 100%), transparent),
+    transparent 70%
+  );
+  box-shadow: 0 0 var(--glow-size, 12px) color-mix(in srgb, var(--accent) calc(var(--glow-intensity, 0.5) * 80%), transparent);
+  will-change: transform;
+  transition: box-shadow 0.3s ease-out, background 0.3s ease-out;
+}
+
+/* ============================================
+   SCENE TRANSITION - "System Activation" Effect
+   ============================================ */
+
+/* Expanding ring animation - 1000ms with fade to opacity 0 */
+@keyframes ring-expand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+    border-color: #67e8f9;
+    box-shadow: 0 0 80px 30px rgba(103, 232, 249, 0.9);
+  }
+  40% {
+    opacity: 0.9;
+    border-color: #a5f3fc;
+    box-shadow: 0 0 100px 40px rgba(165, 243, 252, 0.7);
+  }
+  70% {
+    opacity: 0.6;
+    border-color: #e0f2fe;
+    box-shadow: 0 0 120px 50px rgba(224, 242, 254, 0.5);
+  }
+  100% {
+    width: 300vmax;
+    height: 300vmax;
+    opacity: 0;
+    border-color: #ffffff;
+    box-shadow: 0 0 150px 60px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Wash overlay fade animations */
+@keyframes wash-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes wash-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Content reveal animation */
+@keyframes content-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Transition ring element - 1000ms for smooth expansion */
+.transition-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 3px solid #67e8f9;
+  pointer-events: none;
+  animation: ring-expand 1000ms ease-in-out forwards;
+}
+
+/* Wash overlay */
+.transition-wash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--wash-center) 0%, var(--wash-mid) 50%, var(--wash-edge) 100%);
+  pointer-events: none;
+}
+
+.transition-wash-in {
+  animation: wash-in 600ms ease-in-out forwards;
+}
+
+.transition-wash-out {
+  animation: wash-out 1200ms ease-in-out forwards;
+}
+
+/* Content reveal wrapper */
+.content-reveal {
+  animation: content-reveal 800ms ease-out forwards;
+}
+
+/* Node convergence - applied when transitioning (800ms for smoother feel) */
+.node-converge {
+  transition: transform 800ms cubic-bezier(0.25, 0.1, 0.25, 1),
+              opacity 800ms cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate3d(-50%, -50%, 0) scale(0.3) !important;
+  opacity: 0 !important;
+}
+
+/* Scene exit fade */
+.scene-exit {
+  transition: opacity 400ms ease-out;
+  opacity: 0;
+}
+
+/* ============================================
+   SCENE 1 - Light Theme Enhancements
+   ============================================ */
+
+/* Scan line animation for light theme */
+@keyframes scan-line-light {
+  0% {
+    top: -2px;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.scan-line-light {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(20, 184, 166, 0.3) 20%,
+    rgba(20, 184, 166, 0.6) 50%,
+    rgba(20, 184, 166, 0.3) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 15px rgba(20, 184, 166, 0.4), 0 0 30px rgba(20, 184, 166, 0.2);
+  animation: scan-line-light 8s linear infinite;
+  pointer-events: none;
+}
+
+/* Camera container pulsing glow */
+@keyframes camera-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+                0 0 20px rgba(20, 184, 166, 0.1);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+                0 0 40px rgba(20, 184, 166, 0.25),
+                0 0 60px rgba(20, 184, 166, 0.1);
+  }
+}
+
+.camera-glow-pulse {
+  animation: camera-glow-pulse 4s ease-in-out infinite;
+}
+
+/* Light signal node styling - uses accent color */
+.signal-node-light {
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--accent-glow),
+    transparent 70%
+  );
+  box-shadow: 0 0 15px var(--glow-color);
+  will-change: transform;
+}
+
+/* Staggered entrance animations */
+@keyframes entrance-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.entrance-animate {
+  opacity: 0;
+  animation: entrance-fade-up 0.6s ease-out forwards;
+}
+
+.entrance-delay-1 { animation-delay: 0.1s; }
+.entrance-delay-2 { animation-delay: 0.25s; }
+.entrance-delay-3 { animation-delay: 0.4s; }
+.entrance-delay-4 { animation-delay: 0.55s; }
+.entrance-delay-5 { animation-delay: 0.7s; }
+.entrance-delay-6 { animation-delay: 0.85s; }
+.entrance-delay-7 { animation-delay: 1.0s; }
+
+/* HUD readout text animation */
+@keyframes hud-text-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hud-readout {
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(20, 184, 166, 0.7);
+  animation: hud-text-pulse 2s ease-in-out infinite;
+}
+
+/* Typing cursor effect */
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typing-cursor::after {
+  content: '|';
+  animation: cursor-blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+/* ============================================
+   SCENE 2 - Facial Analysis Styles
+   ============================================ */
+
+/* Emotion icon pulse animation */
+@keyframes emotion-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.emotion-icon {
+  display: inline-block;
+  animation: emotion-pulse 2s ease-in-out infinite;
+}
+
+/* Value change pulse animation */
+@keyframes value-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px 8px var(--accent-glow);
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+}
+
+.value-pulse {
+  animation: value-pulse 500ms ease-out;
+}
+
+/* Recording indicator blink */
+@keyframes recording-blink {
+  0%, 50% {
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
+  }
+  51%, 100% {
+    opacity: 0.6;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+  }
+}
+
+.recording-indicator {
+  animation: recording-blink 1.5s ease-in-out infinite;
+}
+
+/* Landmark toggle active state */
+.landmark-toggle-active {
+  background: rgba(20, 184, 166, 0.15) !important;
+  border-color: rgba(20, 184, 166, 0.5) !important;
+  color: #14b8a6 !important;
+  box-shadow: 0 0 8px rgba(20, 184, 166, 0.2);
+}
+
+/* Analysis panel glassmorphism */
+.analysis-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+}
+
+/* ============================================
+   SCENE 3 - Retail Demo Styles
+   ============================================ */
+
+/* Product grid item hover effect */
+@keyframes product-select-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.6),
+                0 0 20px rgba(20, 184, 166, 0.3);
+  }
+}
+
+.product-selected {
+  animation: product-select-pulse 2s ease-in-out infinite;
+}
+
+/* Auto-advance progress indicator */
+@keyframes auto-advance-progress {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.auto-advance-bar {
+  animation: auto-advance-progress 2s linear forwards;
+}
+
+/* Match score color transitions */
+.match-score-high {
+  color: #22c55e;
+}
+
+.match-score-medium {
+  color: #eab308;
+}
+
+.match-score-low {
+  color: #ef4444;
+}
+
+/* ============================================
+   BLUR + SCALE TRANSITION
+   For Scene 1→2 and Scene 2→3 transitions
+   ============================================ */
+
+@keyframes blur-scale-exit {
+  0% {
+    filter: blur(0px);
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(8px);
+    transform: scale(0.96);
+    opacity: 0.3;
+  }
+}
+
+@keyframes blur-scale-enter {
+  0% {
+    filter: blur(8px);
+    transform: scale(1.04);
+  }
+  100% {
+    filter: blur(0px);
+    transform: scale(1);
+  }
+}
+
+.scene-blur-exit {
+  animation: blur-scale-exit 400ms ease-out forwards;
+}
+
+.scene-blur-enter {
+  animation: blur-scale-enter 500ms ease-out forwards;
+}
+
+/* ============================================
+   VISUAL ENHANCEMENTS - Phase 2
+   ============================================ */
+
+/* Noise texture overlay for premium depth */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Shimmer loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--glass-bg) 25%,
+    var(--glass-bg-strong) 50%,
+    var(--glass-bg) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Camera bracket animations */
+@keyframes bracket-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes bracket-lock {
+  0% {
+    transform: scale(1.15);
+    opacity: 0.4;
+  }
+  60% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.bracket-idle {
+  animation: bracket-pulse 2.5s ease-in-out infinite;
+}
+
+.bracket-locked {
+  animation: bracket-lock 400ms ease-out forwards;
+}
+
+/* Floating particles animation */
+@keyframes particle-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  85% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-120px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent-glow);
+  animation: particle-rise var(--duration, 2s) ease-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ============================================
+   VISUAL ENHANCEMENTS - Phase 3
+   Subtle Interactions
+   ============================================ */
+
+/* Cursor glow effect */
+.cursor-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--accent-glow) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+}
+
+.cursor-glow.hidden {
+  opacity: 0;
+}
+
+/* Ripple click effect */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  transform: scale(0);
+  animation: ripple-expand 600ms ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Card hover lift effect */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dark .hover-lift:hover {
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Glassmorphic tooltip */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  position: absolute;
+  left: 50%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  white-space: nowrap;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.tooltip-top {
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) translateY(4px);
+}
+
+.tooltip-bottom {
+  top: calc(100% + 8px);
+  transform: translateX(-50%) translateY(-4px);
+}
+
+.tooltip-wrapper:hover .tooltip-top {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-wrapper:hover .tooltip-bottom {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================
+   VISUAL ENHANCEMENTS - Phase 4
+   Polish & Feel
+   ============================================ */
+
+/* Magnetic button effect */
+.magnetic-button {
+  transition: transform 0.15s ease-out;
+}
+
+/* Text reveal animation */
+@keyframes char-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.char-reveal {
+  display: inline-block;
+  animation: char-reveal 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+/* Blur state transition */
+.blur-transition {
+  transition: filter 0.3s ease;
+}
+
+.blur-transition.changing {
+  filter: blur(4px);
+}
+
+/* Breathing idle animation */
+@keyframes breathing {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.008);
+  }
+}
+
+.breathing-idle {
+  animation: breathing 3s ease-in-out infinite;
+}
+
+/* ============================================
+   VISUAL ENHANCEMENTS - Phase 5
+   HUD Elements
+   ============================================ */
+
+/* Scan line sweep animation */
+@keyframes scan-sweep {
+  0% {
+    top: -2px;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.scan-line-sweep {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent,
+    var(--accent) 20%,
+    var(--accent) 80%,
+    transparent
+  );
+  box-shadow: 0 0 8px var(--accent-glow);
+  animation: scan-sweep 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* System status badge */
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: status-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Detection ping ripple */
+@keyframes ping-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+
+.detection-ping {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: ping-ripple 0.8s ease-out forwards;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* Frame counter */
+.frame-counter {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  opacity: 0.7;
+}
+
+/* ============================================
+   VISUAL ENHANCEMENTS - Phase 6
+   Atmosphere & Motion
+   ============================================ */
+
+/* Gradient shift - subtle hue cycling */
+@keyframes gradient-shift {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(10deg);
+  }
+}
+
+.gradient-shift {
+  animation: gradient-shift 20s ease-in-out infinite;
+}
+
+/* Light leak - drifting glow overlay */
+@keyframes light-leak-drift {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.12;
+  }
+  80% {
+    opacity: 0.12;
+  }
+  100% {
+    transform: translate(150%, 150%) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.light-leak {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: light-leak-drift 12s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Grid pulse - brighten on detection */
+@keyframes grid-pulse-glow {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.grid-pulsing {
+  animation: grid-pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* Staggered list entry animations */
+.stagger-item {
+  opacity: 0;
+  animation: entrance-fade-up 0.5s ease-out forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0.05s; }
+.stagger-item:nth-child(2) { animation-delay: 0.1s; }
+.stagger-item:nth-child(3) { animation-delay: 0.15s; }
+.stagger-item:nth-child(4) { animation-delay: 0.2s; }
+.stagger-item:nth-child(5) { animation-delay: 0.25s; }
+.stagger-item:nth-child(6) { animation-delay: 0.3s; }
+.stagger-item:nth-child(7) { animation-delay: 0.35s; }
+.stagger-item:nth-child(8) { animation-delay: 0.4s; }
+
+/* Icon morph animations - cross-fade with bounce */
+@keyframes icon-morph-out {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) rotate(-10deg);
+    opacity: 0;
+  }
+}
+
+@keyframes icon-morph-in {
+  0% {
+    transform: scale(0.8) rotate(10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.icon-morphing-out {
+  animation: icon-morph-out 0.2s ease-in forwards;
+}
+
+.icon-morphing-in {
+  animation: icon-morph-in 0.3s ease-out forwards;
+}
