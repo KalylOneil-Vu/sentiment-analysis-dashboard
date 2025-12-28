@@ -1,6 +1,5 @@
-import { useRef, useEffect } from 'react'
-import { useWebcam } from '../../hooks/useWebcam'
-import { useFaceDetection } from '../../hooks/useFaceDetection'
+import { useEffect } from 'react'
+import { useSharedVision } from '../../hooks/useSharedVision'
 import { useEmotionSimulation } from '../../hooks/useEmotionSimulation'
 import { useBackendAnalysis } from '../../hooks/useBackendAnalysis'
 import { useFastVLM } from '../../hooks/useFastVLM'
@@ -18,11 +17,11 @@ interface Scene3aRetailProps {
 }
 
 export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
   const setBackendEngagement = useSceneStore(state => state.setBackendEngagement)
 
-  const { isStreaming } = useWebcam(videoRef)
-  const { landmarks: faceLandmarks } = useFaceDetection(videoRef, isStreaming)
+  // Use shared vision detection from provider
+  const { videoRef, isStreaming, data } = useSharedVision({ preset: 'retail' })
+  const faceLandmarks = data.faceLandmarks
 
   // FastVLM analysis - runs real-time inference on video frames
   const { currentAnalysis: fastvlmAnalysis } = useFastVLM({
@@ -70,8 +69,7 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
         background: `linear-gradient(to bottom, var(--bg-from), var(--bg-to))`,
       }}
     >
-      {/* Hidden video */}
-      <video ref={videoRef} className="hidden" playsInline muted autoPlay />
+      {/* Video is managed by VisionDetectionProvider */}
 
       {/* Floating signal nodes - light theme */}
       <LightSignalNodes />

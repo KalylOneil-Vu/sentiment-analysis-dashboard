@@ -4,7 +4,7 @@ import { FACE_OVAL_INDICES } from '../../../lib/mediapipe/faceDetector'
 import { MatchResult } from '../../../types/product'
 
 interface CameraWithMatchProps {
-  videoRef: RefObject<HTMLVideoElement>
+  videoRef: RefObject<HTMLVideoElement | null>
   landmarks: NormalizedLandmark[] | null
   matchResult: MatchResult
   isAutoAdvancing: boolean

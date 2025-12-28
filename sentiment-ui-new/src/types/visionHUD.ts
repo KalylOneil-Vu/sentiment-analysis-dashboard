@@ -309,3 +309,68 @@ export const EMPTY_VISION_DATA: VisionData = {
   speech: null,
   lastUpdate: 0,
 }
+
+// ============================================================================
+// Preset Types for VisionCamera
+// ============================================================================
+
+export type CameraSize = 'full' | 'compact' | 'thumbnail'
+export type AspectRatio = '16:9' | '4:3' | '3:4' | '1:1'
+
+export type FaceMeshStyle = 'none' | 'outline' | 'tessellation'
+
+export interface HUDPreset {
+  // Module enables
+  face?: boolean
+  pose?: boolean
+  hand?: boolean
+  object?: boolean
+  bio?: boolean
+  speech?: boolean
+
+  // Face mesh style
+  faceMesh?: FaceMeshStyle
+
+  // Display options
+  showSkeleton?: boolean
+  showLabels?: boolean
+  showConfidence?: boolean
+  showBioCard?: boolean
+  showGestureLabel?: boolean
+  showTranscript?: boolean
+  showGrid?: boolean
+
+  // Visual options
+  opacity?: number
+}
+
+export type PresetName =
+  | 'attract'
+  | 'attractFull'
+  | 'analysis'
+  | 'retail'
+  | 'healthcare'
+  | 'stress'
+  | 'sensitivity'
+  | 'summary'
+  | 'full'
+  | 'minimal'
+
+export interface VisionCameraProps {
+  // Preset configuration
+  preset?: PresetName | HUDPreset
+
+  // Size and layout
+  size?: CameraSize
+  aspectRatio?: AspectRatio
+  className?: string
+
+  // Visual options
+  showRecordingIndicator?: boolean
+  showCornerBrackets?: boolean
+  showGrid?: boolean
+  rounded?: boolean
+
+  // Children for scene-specific overlays
+  children?: React.ReactNode
+}

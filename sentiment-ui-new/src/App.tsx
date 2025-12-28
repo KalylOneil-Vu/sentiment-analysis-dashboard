@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSceneStore } from './stores/sceneStore'
 import { useThemeStore } from './stores/themeStore'
 import { useVLMContext } from './hooks/useVLMContext'
+import { VisionDetectionProvider } from './providers/VisionDetectionProvider'
 import { Scene0AttractLoop } from './scenes/Scene0AttractLoop'
 import { Scene1Welcome } from './scenes/Scene1Welcome'
 import { Scene2Analysis } from './scenes/Scene2Analysis'
@@ -12,6 +13,7 @@ import { Scene4Sensitivity } from './scenes/Scene4Sensitivity'
 import { Scene5Summary } from './scenes/Scene5Summary'
 import { SceneVisionHUD } from './scenes/SceneVisionHUD'
 import { SceneTransition, TransitionType, getBlurScaleClass } from './components/SceneTransition'
+import { SceneWithIntro } from './components/SceneWithIntro'
 import { CursorGlow } from './components/CursorGlow'
 import { websocketService } from './services/websocket'
 
@@ -113,6 +115,7 @@ function App() {
   }
 
   return (
+    <VisionDetectionProvider autoStart={true} defaultPreset="full">
     <div className="w-full h-full relative overflow-hidden">
       {/* Noise texture overlay for premium depth */}
       <div className="noise-overlay" />
@@ -164,40 +167,54 @@ function App() {
         )}
         {displayedScene === 1 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene1Welcome onBegin={() => handleSceneChange(2)} />
+            <SceneWithIntro sceneNumber={1}>
+              <Scene1Welcome onBegin={() => handleSceneChange(2)} />
+            </SceneWithIntro>
           </div>
         )}
         {displayedScene === 2 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene2Analysis onContinue={() => handleSceneChange(3)} />
+            <SceneWithIntro sceneNumber={2}>
+              <Scene2Analysis onContinue={() => handleSceneChange(3)} />
+            </SceneWithIntro>
           </div>
         )}
         {displayedScene === 3 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene3aRetail onContinue={() => handleSceneChange(4)} />
+            <SceneWithIntro sceneNumber={3}>
+              <Scene3aRetail onContinue={() => handleSceneChange(4)} />
+            </SceneWithIntro>
           </div>
         )}
         {displayedScene === 4 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene3bHealthcare onContinue={() => handleSceneChange(5)} />
+            <SceneWithIntro sceneNumber={4}>
+              <Scene3bHealthcare onContinue={() => handleSceneChange(5)} />
+            </SceneWithIntro>
           </div>
         )}
         {displayedScene === 5 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene3cHighStress onContinue={() => handleSceneChange(6)} />
+            <SceneWithIntro sceneNumber={5}>
+              <Scene3cHighStress onContinue={() => handleSceneChange(6)} />
+            </SceneWithIntro>
           </div>
         )}
         {displayedScene === 6 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene4Sensitivity onContinue={() => handleSceneChange(7)} />
+            <SceneWithIntro sceneNumber={6}>
+              <Scene4Sensitivity onContinue={() => handleSceneChange(7)} />
+            </SceneWithIntro>
           </div>
         )}
         {displayedScene === 7 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <Scene5Summary
-              onReplay={() => handleSceneChange(0)}
-              onVisionHUD={() => handleSceneChange(8)}
-            />
+            <SceneWithIntro sceneNumber={7}>
+              <Scene5Summary
+                onReplay={() => handleSceneChange(0)}
+                onVisionHUD={() => handleSceneChange(8)}
+              />
+            </SceneWithIntro>
           </div>
         )}
         {displayedScene === 8 && (
@@ -218,6 +235,7 @@ function App() {
         )}
       </div>
     </div>
+    </VisionDetectionProvider>
   )
 }
 

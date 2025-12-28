@@ -5,9 +5,9 @@ interface HUDOverlayProps {
 
 export function HUDOverlay({ isUserPresent, isLoading = false }: HUDOverlayProps) {
   return (
-    <div className="absolute inset-0 flex flex-col justify-between p-6 pointer-events-none">
-      {/* Top section - Status indicators */}
-      <div className="flex justify-between items-start">
+    <div className="absolute inset-0 flex flex-col pointer-events-none">
+      {/* Top section - Status indicators (above VisionHUD) */}
+      <div className="flex justify-between items-start p-6">
         {/* Left status */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -53,62 +53,12 @@ export function HUDOverlay({ isUserPresent, isLoading = false }: HUDOverlayProps
         </div>
       </div>
 
-      {/* Center - Main CTA */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8">
-        <div className="text-center space-y-6 max-w-xs">
-          {/* Main heading */}
-          <div className="space-y-3">
-            <h1
-              className="text-lg font-light tracking-[0.15em] uppercase text-glow fade-in"
-              style={{ color: 'var(--accent)' }}
-            >
-              Step Closer
-            </h1>
-            <p
-              className="text-sm font-light tracking-[0.08em] fade-in-delay-1"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              to begin cognitive load challenge
-            </p>
-          </div>
+      {/* Spacer for VisionHUD area (30% top + camera panel height) */}
+      <div className="flex-1" style={{ minHeight: '55%' }} />
 
-          {/* Divider */}
-          <div className="flex items-center justify-center gap-3 fade-in-delay-1">
-            <div
-              className="w-8 h-px"
-              style={{ background: `linear-gradient(to right, transparent, var(--accent-muted))` }}
-            />
-            <div
-              className="w-1.5 h-1.5 rounded-full"
-              style={{
-                backgroundColor: 'var(--accent-muted)',
-                boxShadow: '0 0 6px var(--accent-glow)',
-              }}
-            />
-            <div
-              className="w-8 h-px"
-              style={{ background: `linear-gradient(to left, transparent, var(--accent-muted))` }}
-            />
-          </div>
-
-          {/* Sub text */}
-          <p
-            className="text-xs font-light tracking-[0.12em] leading-relaxed fade-in-delay-2"
-            style={{ color: 'var(--text-faint)' }}
-          >
-            The system is already analyzing
-            <br />
-            your focus and emotional state
-          </p>
-        </div>
-      </div>
-
-      {/* Bottom section - Technical info */}
-      <div className="flex justify-between items-end">
-        {/* Left spacer - matches right width for true centering */}
-        <div className="w-24 md:w-32" />
-
-        {/* Center - Interaction hint */}
+      {/* Bottom section - Interaction hint (below VisionHUD) */}
+      <div className="flex flex-col items-center gap-6 px-6 pb-8">
+        {/* Interaction hint */}
         <div className="flex items-center gap-2">
           <div className="flex gap-1">
             {[...Array(3)].map((_, i) => (
@@ -127,22 +77,6 @@ export function HUDOverlay({ isUserPresent, isLoading = false }: HUDOverlayProps
             style={{ color: 'var(--text-faint)' }}
           >
             TAP ANYWHERE TO BEGIN
-          </span>
-        </div>
-
-        {/* Right info */}
-        <div className="w-24 md:w-32 flex flex-col items-end gap-0.5">
-          <span
-            className="text-[9px] tracking-[0.15em] uppercase"
-            style={{ color: 'var(--text-faint)' }}
-          >
-            FACIAL RECOGNITION
-          </span>
-          <span
-            className="text-[8px] tracking-[0.1em] uppercase"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            ACTIVE
           </span>
         </div>
       </div>

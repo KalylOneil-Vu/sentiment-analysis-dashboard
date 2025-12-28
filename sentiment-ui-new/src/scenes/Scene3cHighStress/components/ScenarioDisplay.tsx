@@ -6,7 +6,7 @@ import { StressBar } from './StressBar'
 
 interface ScenarioDisplayProps {
   scenario: Scenario
-  videoRef: RefObject<HTMLVideoElement>
+  videoRef: RefObject<HTMLVideoElement | null>
   landmarks: NormalizedLandmark[] | null
   stressData: StressMonitoringResult
 }

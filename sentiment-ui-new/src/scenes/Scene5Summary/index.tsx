@@ -1,6 +1,5 @@
-import { useRef, useState, useEffect } from 'react'
-import { useWebcam } from '../../hooks/useWebcam'
-import { useFaceDetection } from '../../hooks/useFaceDetection'
+import { useState, useEffect } from 'react'
+import { useSharedVision } from '../../hooks/useSharedVision'
 import { LightSignalNodes } from '../Scene1Welcome/components/LightSignalNodes'
 import { ReplayCamera } from './components/ReplayCamera'
 import { TakeawayCard } from './components/TakeawayCard'
@@ -20,11 +19,11 @@ const TAKEAWAYS = [
 ]
 
 export function Scene5Summary({ onReplay, onVisionHUD }: Scene5SummaryProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const { isStreaming } = useWebcam(videoRef)
-  const { landmarks: faceLandmarks } = useFaceDetection(videoRef, isStreaming)
+  // Use shared vision detection from provider
+  const { videoRef, data } = useSharedVision({ preset: 'summary' })
+  const faceLandmarks = data.faceLandmarks
 
   // Auto-cycle through takeaways
   useEffect(() => {
@@ -44,8 +43,7 @@ export function Scene5Summary({ onReplay, onVisionHUD }: Scene5SummaryProps) {
         background: `linear-gradient(to bottom, var(--bg-from), var(--bg-to))`,
       }}
     >
-      {/* Hidden video */}
-      <video ref={videoRef} className="hidden" playsInline muted autoPlay />
+      {/* Video is managed by VisionDetectionProvider */}
 
       {/* Floating signal nodes */}
       <LightSignalNodes />

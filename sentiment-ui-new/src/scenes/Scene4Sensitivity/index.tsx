@@ -1,6 +1,5 @@
-import { useRef, useState } from 'react'
-import { useWebcam } from '../../hooks/useWebcam'
-import { useFaceDetection } from '../../hooks/useFaceDetection'
+import { useState } from 'react'
+import { useSharedVision } from '../../hooks/useSharedVision'
 import { useEmotionSimulation } from '../../hooks/useEmotionSimulation'
 import { useSensitivityBias } from '../../hooks/useSensitivityBias'
 import { LightSignalNodes } from '../Scene1Welcome/components/LightSignalNodes'
@@ -14,11 +13,11 @@ interface Scene4SensitivityProps {
 }
 
 export function Scene4Sensitivity({ onContinue }: Scene4SensitivityProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
   const [sensitivity, setSensitivity] = useState(50)
 
-  const { isStreaming } = useWebcam(videoRef)
-  const { landmarks: faceLandmarks } = useFaceDetection(videoRef, isStreaming)
+  // Use shared vision detection from provider
+  const { videoRef, data } = useSharedVision({ preset: 'sensitivity' })
+  const faceLandmarks = data.faceLandmarks
 
   const faceDetected = faceLandmarks !== null && faceLandmarks.length > 0
   const { currentEmotion } = useEmotionSimulation({ faceDetected })
@@ -36,8 +35,7 @@ export function Scene4Sensitivity({ onContinue }: Scene4SensitivityProps) {
         background: `linear-gradient(to bottom, var(--bg-from), var(--bg-to))`,
       }}
     >
-      {/* Hidden video */}
-      <video ref={videoRef} className="hidden" playsInline muted autoPlay />
+      {/* Video is managed by VisionDetectionProvider */}
 
       {/* Floating signal nodes */}
       <LightSignalNodes />
