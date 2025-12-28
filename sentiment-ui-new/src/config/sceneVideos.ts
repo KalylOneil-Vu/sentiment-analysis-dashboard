@@ -14,53 +14,56 @@ export interface SceneVideoConfig {
  * Scene 0 has no intro video (shows live VisionHUD to attract users)
  * Scene 8 has no intro video (optional Vision HUD demo)
  */
+// Sample video for testing (used for all scenes until real videos are added)
+const SAMPLE_VIDEO = '/videos/Rudimentary Multi-Object Tracking Test 1A.mp4'
+
 export const SCENE_VIDEOS: Record<number, SceneVideoConfig> = {
   // Scene 1: Welcome
   1: {
     sceneNumber: 1,
-    videoUrl: '/videos/scene1-intro.mp4',
+    videoUrl: SAMPLE_VIDEO,
     title: 'Welcome',
   },
 
   // Scene 2: Analysis
   2: {
     sceneNumber: 2,
-    videoUrl: '/videos/scene2-intro.mp4',
+    videoUrl: SAMPLE_VIDEO,
     title: 'Analysis',
   },
 
   // Scene 3a: Retail
   3: {
     sceneNumber: 3,
-    videoUrl: '/videos/scene3a-intro.mp4',
+    videoUrl: SAMPLE_VIDEO,
     title: 'Retail',
   },
 
   // Scene 3b: Healthcare
   4: {
     sceneNumber: 4,
-    videoUrl: '/videos/scene3b-intro.mp4',
+    videoUrl: SAMPLE_VIDEO,
     title: 'Healthcare',
   },
 
   // Scene 3c: High Stress
   5: {
     sceneNumber: 5,
-    videoUrl: '/videos/scene3c-intro.mp4',
+    videoUrl: SAMPLE_VIDEO,
     title: 'High Stress',
   },
 
   // Scene 4: Sensitivity
   6: {
     sceneNumber: 6,
-    videoUrl: '/videos/scene4-intro.mp4',
+    videoUrl: SAMPLE_VIDEO,
     title: 'Sensitivity',
   },
 
   // Scene 5: Summary
   7: {
     sceneNumber: 7,
-    videoUrl: '/videos/scene5-intro.mp4',
+    videoUrl: SAMPLE_VIDEO,
     title: 'Summary',
   },
 }

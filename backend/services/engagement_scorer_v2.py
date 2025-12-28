@@ -53,13 +53,13 @@ class PersonEngagement:
             weights: Custom weights dict, or None to use defaults
         """
         if weights is None:
-            # Default weights matching original plan
+            # Optimized weights - FastVLM is primary source
             weights = {
-                'fastvlm': 0.35,
-                'emotion': 0.25,
-                'body_language': 0.15,
-                'speech': 0.15,
-                'participation': 0.10
+                'fastvlm': 0.50,       # Primary: contextual understanding
+                'emotion': 0.20,        # From FastVLM keywords
+                'body_language': 0.20,  # From FastVLM keywords
+                'speech': 0.05,         # Reduced (often unused)
+                'participation': 0.05   # Reduced
             }
 
         self.overall_score = (

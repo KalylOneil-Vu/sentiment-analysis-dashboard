@@ -118,7 +118,7 @@ export function Scene1Welcome({ onBegin }: Scene1WelcomeProps) {
 
   return (
     <div
-      className="relative w-full h-full flex items-center justify-center p-6 md:p-12 transition-colors duration-300"
+      className="relative w-full h-full flex items-center justify-center p-4 md:p-8 lg:p-12 transition-colors duration-300"
       style={{
         background: `linear-gradient(to bottom, var(--bg-from), var(--bg-to))`,
       }}
@@ -141,10 +141,10 @@ export function Scene1Welcome({ onBegin }: Scene1WelcomeProps) {
         }}
       />
 
-      {/* Main content container */}
-      <div className="relative flex flex-col md:flex-row items-center gap-8 md:gap-12 max-w-4xl w-full z-10">
+      {/* Main content container - optimized for 9:21 vertical */}
+      <div className="relative flex flex-col md:flex-row items-center gap-4 md:gap-8 lg:gap-12 max-w-4xl w-full z-10">
         {/* Camera feed area */}
-        <div className="relative w-full md:w-1/2 aspect-[3/4] max-w-sm entrance-animate entrance-delay-1">
+        <div className="relative w-[85%] md:w-1/2 aspect-[3/4] max-w-xs md:max-w-sm entrance-animate entrance-delay-1">
           {/* Glassmorphic camera container with pulsing glow */}
           <div
             ref={containerRef}

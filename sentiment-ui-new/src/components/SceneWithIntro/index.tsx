@@ -1,6 +1,7 @@
 /**
  * SceneWithIntro Wrapper
  * Wraps scene content with intro video functionality
+ * Preloads scene resources while video plays for instant transitions
  */
 
 import { ReactNode } from 'react'
@@ -23,14 +24,24 @@ export function SceneWithIntro({
     skipVideo,
   })
 
-  // Show intro video if in video phase
+  // During video phase: show video AND preload scene content (hidden)
   if (phase === 'video' && videoConfig) {
     return (
-      <IntroVideo
-        videoUrl={videoConfig.videoUrl}
-        onVideoEnd={onVideoEnd}
-        onSkip={skipToContent}
-      />
+      <>
+        <IntroVideo
+          videoUrl={videoConfig.videoUrl}
+          onVideoEnd={onVideoEnd}
+          onSkip={skipToContent}
+        />
+        {/* Preload scene content while video plays (hidden but mounted) */}
+        <div
+          className="fixed inset-0 opacity-0 pointer-events-none"
+          style={{ visibility: 'hidden', zIndex: -1 }}
+          aria-hidden="true"
+        >
+          {children}
+        </div>
+      </>
     )
   }
 

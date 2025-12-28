@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useSharedVision } from '../../hooks/useSharedVision'
-import { useEmotionSimulation } from '../../hooks/useEmotionSimulation'
+import { useUnifiedEmotion } from '../../hooks/useUnifiedEmotion'
 import { useBackendAnalysis } from '../../hooks/useBackendAnalysis'
 import { useFastVLM } from '../../hooks/useFastVLM'
 import { useProductMatching } from '../../hooks/useProductMatching'
@@ -47,8 +47,8 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
     }
   }, [engagement, setBackendEngagement])
 
-  const faceDetected = faceLandmarks !== null && faceLandmarks.length > 0
-  const { currentEmotion } = useEmotionSimulation({ faceDetected })
+  // Use unified emotion (prioritizes face-api, then backend, then simulated)
+  const { emotion: currentEmotion, faceDetected } = useUnifiedEmotion()
 
   const {
     products,
@@ -64,7 +64,7 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
 
   return (
     <div
-      className="relative w-full h-full flex items-center justify-center p-6 md:p-10 transition-colors duration-300"
+      className="scene-container scene-scrollable relative w-full h-full flex items-center justify-center p-3 md:p-6 lg:p-10 transition-colors duration-300 overflow-y-auto"
       style={{
         background: `linear-gradient(to bottom, var(--bg-from), var(--bg-to))`,
       }}
@@ -89,12 +89,12 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
         }}
       />
 
-      {/* Main two-panel layout - constrained height */}
-      <div className="relative flex flex-col md:flex-row items-stretch gap-6 max-w-5xl w-full z-10" style={{ maxHeight: '85vh' }}>
+      {/* Main two-panel layout - vertical on mobile */}
+      <div className="panel-layout aspect-flex relative flex flex-col md:flex-row items-stretch gap-3 md:gap-6 max-w-4xl w-full z-10">
         {/* Left panel - Camera and Product */}
-        <div className="w-full md:w-[38%]">
+        <div className="w-full md:w-[40%] flex-shrink-0">
           <div
-            className="h-full p-5 rounded-2xl flex flex-col"
+            className="h-full p-3 md:p-5 rounded-2xl flex flex-col"
             style={{
               background: 'var(--glass-bg)',
               backdropFilter: 'blur(12px)',
@@ -102,7 +102,7 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
             }}
           >
             <h2
-              className="text-lg font-semibold mb-4"
+              className="text-base md:text-lg font-semibold mb-3 md:mb-4"
               style={{ color: 'var(--text-primary)' }}
             >
               The Face of Our Emotions
@@ -143,9 +143,9 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
         </div>
 
         {/* Right panel - Retail info and product grid */}
-        <div className="w-full md:w-[62%]">
+        <div className="w-full md:w-[60%] flex-shrink-0">
           <div
-            className="h-full p-5 rounded-2xl flex flex-col"
+            className="h-full p-3 md:p-5 rounded-2xl flex flex-col"
             style={{
               background: 'var(--glass-bg)',
               backdropFilter: 'blur(12px)',
@@ -153,21 +153,21 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
             }}
           >
             {/* Retail header */}
-            <div className="mb-4">
+            <div className="mb-3 md:mb-4">
               <h3
-                className="text-xl font-semibold mb-1"
+                className="text-lg md:text-xl font-semibold mb-1"
                 style={{ color: 'var(--text-primary)' }}
               >
                 Retail
               </h3>
               <p
-                className="text-sm leading-relaxed"
+                className="text-xs md:text-sm leading-relaxed"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                AI can interpret reactions to products to improve store design and engagement.
+                AI interprets reactions to improve store design.
               </p>
-              <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-                <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Tap through the different products</span>{' '}
+              <p className="text-xs md:text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+                <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Tap products</span>{' '}
                 to reveal preferences.
               </p>
             </div>
@@ -202,7 +202,7 @@ export function Scene3aRetail({ onContinue }: Scene3aRetailProps) {
       </div>
 
       {/* Scene indicator */}
-      <div className="absolute top-6 right-6 flex flex-col items-end gap-0.5 entrance-animate entrance-delay-5">
+      <div className="scene-indicator absolute top-6 right-6 flex flex-col items-end gap-0.5 entrance-animate entrance-delay-5">
         <span
           className="text-[10px] tracking-[0.2em] uppercase"
           style={{ color: 'var(--text-faint)' }}

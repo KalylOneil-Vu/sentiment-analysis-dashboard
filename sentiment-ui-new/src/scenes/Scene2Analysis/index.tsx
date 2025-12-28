@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSharedVision } from '../../hooks/useSharedVision'
-import { useEmotionSimulation } from '../../hooks/useEmotionSimulation'
+import { useUnifiedEmotion } from '../../hooks/useUnifiedEmotion'
 import { useBackendAnalysis } from '../../hooks/useBackendAnalysis'
 import { useFastVLM } from '../../hooks/useFastVLM'
 import { useSceneStore } from '../../stores/sceneStore'
@@ -59,8 +59,8 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
     }
   }, [engagement, setBackendEngagement])
 
-  const faceDetected = faceLandmarks !== null && faceLandmarks.length > 0
-  const { currentEmotion, focusScore } = useEmotionSimulation({ faceDetected })
+  // Use unified emotion (prioritizes face-api, then backend, then simulated)
+  const { emotion: currentEmotion, focusScore } = useUnifiedEmotion()
 
   const [landmarkVisibility, setLandmarkVisibility] = useState<LandmarkVisibility>({
     eyes: true,
@@ -78,7 +78,7 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
 
   return (
     <div
-      className="relative w-full h-full flex items-center justify-center p-6 md:p-12 transition-colors duration-300 gradient-shift"
+      className="scene-container scene-scrollable relative w-full h-full flex items-center justify-center p-3 md:p-6 lg:p-12 transition-colors duration-300 gradient-shift overflow-y-auto"
       style={{
         background: `linear-gradient(to bottom, var(--bg-from), var(--bg-to))`,
       }}
@@ -103,15 +103,14 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
         }}
       />
 
-      {/* Main three-panel layout - constrained height */}
+      {/* Main layout - vertical scroll on mobile, horizontal on desktop */}
       <div
-        className="relative flex flex-col md:flex-row items-stretch gap-4 max-w-6xl w-full z-10"
-        style={{ maxHeight: '85vh' }}
+        className="panel-layout aspect-flex relative flex flex-col md:flex-row items-stretch gap-3 md:gap-4 max-w-5xl w-full z-10"
       >
         {/* Left panel - Camera feed */}
-        <div className="w-full md:w-[35%]">
+        <div className="w-full md:w-[35%] flex-shrink-0">
           <div
-            className="h-full p-4 rounded-2xl flex flex-col"
+            className="h-full p-3 md:p-4 rounded-2xl flex flex-col"
             style={{
               background: 'var(--glass-bg)',
               backdropFilter: 'blur(12px)',
@@ -127,9 +126,9 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
         </div>
 
         {/* Center panel - FastVLM Real-time Analysis */}
-        <div className="w-full md:w-[35%]">
+        <div className="w-full md:w-[35%] flex-shrink-0">
           <div
-            className="h-full p-4 rounded-2xl flex flex-col gap-3"
+            className="h-full p-3 md:p-4 rounded-2xl flex flex-col gap-2 md:gap-3"
             style={{
               background: 'var(--glass-bg)',
               backdropFilter: 'blur(12px)',
@@ -137,7 +136,7 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
             }}
           >
             <h2
-              className="text-lg font-semibold"
+              className="text-base md:text-lg font-semibold"
               style={{ color: 'var(--text-primary)' }}
             >
               Real-time Vision Analysis
@@ -159,23 +158,23 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
 
             {/* VLM Status info */}
             <div
-              className="mt-auto pt-3 text-center"
+              className="mt-auto pt-2 md:pt-3 text-center"
               style={{ borderTop: '1px solid var(--glass-border)' }}
             >
               <p
-                className="text-[10px] leading-relaxed"
+                className="text-[9px] md:text-[10px] leading-relaxed"
                 style={{ color: 'var(--text-muted)' }}
               >
-                FastVLM analyzes your expressions in real-time, extracting emotional cues and body language indicators.
+                FastVLM analyzes expressions in real-time.
               </p>
             </div>
           </div>
         </div>
 
         {/* Right panel - Emotion Analysis */}
-        <div className="w-full md:w-[30%]">
+        <div className="w-full md:w-[30%] flex-shrink-0">
           <div
-            className="h-full p-4 rounded-2xl flex flex-col"
+            className="h-full p-3 md:p-4 rounded-2xl flex flex-col"
             style={{
               background: 'var(--glass-bg)',
               backdropFilter: 'blur(12px)',
@@ -183,7 +182,7 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
             }}
           >
             <h2
-              className="text-lg font-semibold mb-3"
+              className="text-base md:text-lg font-semibold mb-2 md:mb-3"
               style={{ color: 'var(--text-primary)' }}
             >
               Emotion Analysis
@@ -200,7 +199,7 @@ export function Scene2Analysis({ onContinue }: Scene2AnalysisProps) {
       </div>
 
       {/* Scene indicator */}
-      <div className="absolute top-6 right-6 flex flex-col items-end gap-0.5 entrance-animate entrance-delay-6">
+      <div className="scene-indicator absolute top-6 right-6 flex flex-col items-end gap-0.5 entrance-animate entrance-delay-6">
         <span
           className="text-[10px] tracking-[0.2em] uppercase"
           style={{ color: 'var(--text-faint)' }}

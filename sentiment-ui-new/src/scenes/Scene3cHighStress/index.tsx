@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSharedVision } from '../../hooks/useSharedVision'
-import { useEmotionSimulation } from '../../hooks/useEmotionSimulation'
+import { useUnifiedEmotion } from '../../hooks/useUnifiedEmotion'
 import { useBackendAnalysis } from '../../hooks/useBackendAnalysis'
 import { useFastVLM } from '../../hooks/useFastVLM'
 import { useStressMonitoring } from '../../hooks/useStressMonitoring'
@@ -48,8 +48,8 @@ export function Scene3cHighStress({ onContinue }: Scene3cHighStressProps) {
     }
   }, [engagement, setBackendEngagement])
 
-  const faceDetected = faceLandmarks !== null && faceLandmarks.length > 0
-  const { currentEmotion } = useEmotionSimulation({ faceDetected })
+  // Use unified emotion (prioritizes face-api, then backend, then simulated)
+  const { emotion: currentEmotion, faceDetected } = useUnifiedEmotion()
 
   const stressData = useStressMonitoring({
     currentEmotion: currentEmotion.type,
@@ -60,7 +60,7 @@ export function Scene3cHighStress({ onContinue }: Scene3cHighStressProps) {
 
   return (
     <div
-      className="relative w-full h-full flex items-center justify-center p-6 md:p-10 transition-colors duration-300"
+      className="scene-container scene-scrollable relative w-full h-full flex items-center justify-center p-3 md:p-6 lg:p-10 transition-colors duration-300 overflow-y-auto"
       style={{
         background: `linear-gradient(to bottom, var(--bg-from), var(--bg-to))`,
       }}
@@ -86,10 +86,7 @@ export function Scene3cHighStress({ onContinue }: Scene3cHighStressProps) {
       />
 
       {/* Main two-panel layout */}
-      <div
-        className="relative flex flex-col md:flex-row items-stretch gap-6 max-w-5xl w-full z-10"
-        style={{ maxHeight: '85vh' }}
-      >
+      <div className="panel-layout aspect-flex relative flex flex-col md:flex-row items-stretch gap-3 md:gap-6 max-w-5xl w-full z-10">
         {/* Left panel - Scenario display */}
         <div className="w-full md:w-[45%]">
           <div
@@ -202,7 +199,7 @@ export function Scene3cHighStress({ onContinue }: Scene3cHighStressProps) {
       </div>
 
       {/* Scene indicator */}
-      <div className="absolute top-6 right-6 flex flex-col items-end gap-0.5 entrance-animate entrance-delay-5">
+      <div className="scene-indicator absolute top-6 right-6 flex flex-col items-end gap-0.5 entrance-animate entrance-delay-5">
         <span
           className="text-[10px] tracking-[0.2em] uppercase"
           style={{ color: 'var(--text-faint)' }}

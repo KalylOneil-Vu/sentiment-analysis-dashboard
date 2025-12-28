@@ -1,28 +1,19 @@
 """
-FastAPI Backend with Full ML Stack Integration
+FastAPI Backend - Lightweight FastVLM Integration
 
-Combines FastVLM, DeepFace, and CV analysis for comprehensive engagement tracking.
+Optimized for speed: relies on client-side MediaPipe for detection,
+processes FastVLM keywords for engagement scoring.
+No heavy ML models (DeepFace removed for performance).
 """
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
-import cv2
-import numpy as np
-import base64
 from datetime import datetime
 import httpx
 import os
 from dotenv import load_dotenv
-
-# Try to import DeepFace, fallback to OpenCV if not available
-DEEPFACE_AVAILABLE = False
-try:
-    from deepface import DeepFace
-    DEEPFACE_AVAILABLE = True
-except Exception as e:
-    print(f"DeepFace not available: {e}. Using OpenCV fallback.")
 
 from services.keyword_parser import get_keyword_parser
 from services.engagement_scorer_v2 import get_engagement_scorer, PersonEngagement
@@ -71,10 +62,6 @@ manager = ConnectionManager()
 keyword_parser = get_keyword_parser()
 engagement_scorer = get_engagement_scorer()
 
-# Load face cascade
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_smile.xml')
-
 
 async def send_webhook(engagement_score: float, keywords: dict = None):
     """Send engagement score and keywords to configured webhook endpoint.
@@ -116,15 +103,11 @@ async def send_webhook(engagement_score: float, keywords: dict = None):
 async def lifespan(app: FastAPI):
     """Manage application lifecycle."""
     logger.info("=" * 60)
-    logger.info("SENTIMENT ANALYSIS API - Enhanced ML Stack")
+    logger.info("SENTIMENT ANALYSIS API - Lightweight")
     logger.info("=" * 60)
     logger.info("Features:")
-    logger.info("  * FastVLM keyword processing (35% weight)")
-    if DEEPFACE_AVAILABLE:
-        logger.info("  * DeepFace 7-emotion classification (25% weight)")
-    else:
-        logger.info("  * OpenCV smile detection (25% weight)")
-    logger.info("  * Body language analysis (15% weight)")
+    logger.info("  * FastVLM keyword processing (primary)")
+    logger.info("  * Client-side MediaPipe detection")
     logger.info("  * Webhook integration")
     logger.info("=" * 60)
     yield
@@ -226,114 +209,46 @@ async def process_frame(
     fastvlm_text: str,
     fastvlm_keywords: list
 ) -> dict:
-    """Process frame with FastVLM keywords."""
+    """Process FastVLM keywords for engagement scoring.
+
+    Optimized: No image processing - relies on client-side MediaPipe detection.
+    FastVLM keywords are the primary source of engagement data.
+    """
     try:
-        # Decode frame
-        if ',' in frame_data:
-            frame_data = frame_data.split(',')[1]
-
-        img_bytes = base64.b64decode(frame_data)
-        nparr = np.frombuffer(img_bytes, np.uint8)
-        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-        if frame is None:
-            return {"error": "Failed to decode frame"}
-
-        # Parse FastVLM output
+        # Parse FastVLM output - this is the primary data source
         parsed_vlm = keyword_parser.parse(fastvlm_text)
 
-        # Detect faces
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.1, 5, minSize=(30, 30))
+        logger.info(f"FastVLM score: {parsed_vlm['contextual_score']:.2f}")
+        if fastvlm_text:
+            logger.info(f"FastVLM text: {fastvlm_text[:80]}...")
 
-        logger.info(f"Detected {len(faces)} faces, FastVLM score: {parsed_vlm['contextual_score']:.2f}")
-        logger.info(f"FastVLM text: {fastvlm_text[:100]}...")  # Log first 100 chars
-        logger.info(f"Extracted keywords - Positive: {parsed_vlm['keywords']['positive']}, Negative: {parsed_vlm['keywords']['negative']}")
-        logger.info(f"Body language: {parsed_vlm['body_language']}")
-        logger.info(f"Emotions: {parsed_vlm['emotions']}")
+        # Create single person engagement from FastVLM data
+        # (MediaPipe handles face detection client-side)
+        emotion_data = {
+            'engagement_score': parsed_vlm['contextual_score'],
+            'dominant_emotion': parsed_vlm['emotions'].get('dominant', 'neutral'),
+            'emotion_scores': {}
+        }
 
-        # Process each face
-        persons = []
-        for i, (x, y, w, h) in enumerate(faces):
-            # Extract face region for DeepFace analysis
-            face_img = frame[y:y+h, x:x+w]
+        # Map FastVLM emotions to scores
+        for emotion in parsed_vlm['emotions'].get('positive', []):
+            emotion_data['emotion_scores'][emotion] = 80
+        for emotion in parsed_vlm['emotions'].get('negative', []):
+            emotion_data['emotion_scores'][emotion] = 60
+        if not emotion_data['emotion_scores']:
+            emotion_data['emotion_scores']['neutral'] = 70
 
-            # DeepFace emotion analysis (7 emotions) or OpenCV fallback
-            emotion_data = None
+        # Create person engagement from FastVLM analysis
+        person = engagement_scorer.score_person(
+            track_id=1,
+            fastvlm_data=parsed_vlm,
+            emotion_data=emotion_data,
+            speech_data=None,
+            bbox=None  # No bbox needed - client handles detection
+        )
 
-            if DEEPFACE_AVAILABLE:
-                try:
-                    # Analyze emotions using DeepFace
-                    analysis = DeepFace.analyze(
-                        face_img,
-                        actions=['emotion'],
-                        enforce_detection=False,
-                        detector_backend='opencv',
-                        silent=True
-                    )
-
-                    # Extract emotion data (handle both list and dict responses)
-                    if isinstance(analysis, list):
-                        analysis = analysis[0]
-
-                    emotions = analysis.get('emotion', {})
-                    dominant_emotion = analysis.get('dominant_emotion', 'neutral').lower()
-
-                    # Calculate engagement score from emotions
-                    # Positive emotions: happy, surprise (when moderate)
-                    # Neutral: neutral, calm
-                    # Negative: sad, angry, fear, disgust
-                    positive_score = emotions.get('happy', 0) + emotions.get('surprise', 0) * 0.5
-                    negative_score = emotions.get('sad', 0) + emotions.get('angry', 0) + emotions.get('fear', 0) + emotions.get('disgust', 0)
-                    neutral_score = emotions.get('neutral', 0)
-
-                    # Normalize to 0-1 scale (emotions are 0-100 percentages)
-                    emotion_score = (positive_score - negative_score * 0.5 + neutral_score * 0.3) / 100
-                    emotion_score = max(0.0, min(1.0, emotion_score))  # Clamp to [0, 1]
-
-                    emotion_data = {
-                        'engagement_score': emotion_score,
-                        'dominant_emotion': dominant_emotion,
-                        'emotion_scores': emotions
-                    }
-
-                    logger.info(f"Face {i+1} [DeepFace]: {dominant_emotion}, Score = {emotion_score:.2f}")
-
-                except Exception as e:
-                    logger.warning(f"DeepFace failed for face {i+1}: {e}. Using OpenCV fallback.")
-                    # Don't modify DEEPFACE_AVAILABLE here - just fall through to OpenCV
-                    emotion_data = None  # Ensure we fall through to OpenCV
-
-            if not DEEPFACE_AVAILABLE or emotion_data is None:
-                # Fallback to basic smile detection (OpenCV)
-                face_roi_gray = gray[y:y+h, x:x+w]
-                smiles = smile_cascade.detectMultiScale(face_roi_gray, 1.8, 20)
-                is_smiling = len(smiles) > 0
-
-                emotion_score = 0.8 if is_smiling else 0.5
-                dominant_emotion = "happy" if is_smiling else "neutral"
-
-                emotion_data = {
-                    'engagement_score': emotion_score,
-                    'dominant_emotion': dominant_emotion,
-                    'emotion_scores': {dominant_emotion: 100}
-                }
-
-                logger.info(f"Face {i+1} [OpenCV]: {dominant_emotion}, Score = {emotion_score:.2f}")
-
-            # Create person engagement
-            person = engagement_scorer.score_person(
-                track_id=i + 1,
-                fastvlm_data=parsed_vlm,
-                emotion_data=emotion_data,
-                speech_data=None,
-                bbox={'x1': int(x), 'y1': int(y), 'x2': int(x+w), 'y2': int(y+h)}
-            )
-
-            persons.append(person)
-
-        # Aggregate
-        room_engagement = engagement_scorer.aggregate_room(persons)
+        # Aggregate (single person)
+        room_engagement = engagement_scorer.aggregate_room([person])
 
         # Add parsed keywords to response
         result = room_engagement.to_dict()
@@ -346,18 +261,18 @@ async def process_frame(
         return result
 
     except Exception as e:
-        logger.error(f"Error processing frame: {e}")
+        logger.error(f"Error processing: {e}")
         return {"error": str(e)}
 
 
 if __name__ == "__main__":
     print("\n" + "="*60)
-    print("SENTIMENT ANALYSIS API - FastVLM Integration")
+    print("SENTIMENT ANALYSIS API - Lightweight")
     print("="*60)
     print("\nFeatures:")
-    print("  * FastVLM keyword analysis (runs in browser)")
-    print("  * OpenCV face & smile detection")
-    print("  * Combined engagement scoring")
+    print("  * FastVLM keyword analysis (primary)")
+    print("  * Client-side MediaPipe (no server-side CV)")
+    print("  * Fast engagement scoring")
     print("\nServer: http://localhost:8000")
     print("Docs: http://localhost:8000/docs")
     print("\n" + "="*60 + "\n")

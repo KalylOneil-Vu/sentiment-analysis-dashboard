@@ -1139,3 +1139,118 @@ html, body, #root {
 .icon-morphing-in {
   animation: icon-morph-in 0.3s ease-out forwards;
 }
+
+/* ============================================
+   VERTICAL DISPLAY RESPONSIVE FIXES
+   For 9:21 and similar portrait aspect ratios
+   ============================================ */
+
+/* Detect vertical/portrait displays using aspect-ratio */
+@media (max-aspect-ratio: 9/16) {
+  /* Force single column layout on vertical displays */
+  .vertical-stack {
+    flex-direction: column !important;
+  }
+
+  /* Reduce excessive padding */
+  .vertical-reduce-padding {
+    padding: 0.75rem !important;
+  }
+
+  /* Remove max-width constraints */
+  .vertical-full-width {
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  /* Smaller text on vertical */
+  .vertical-text-sm {
+    font-size: 0.75rem !important;
+  }
+
+  /* Reduce gaps on vertical */
+  .vertical-gap-sm {
+    gap: 0.5rem !important;
+  }
+}
+
+/* More aggressive fixes for very narrow displays (9:21+) */
+@media (max-aspect-ratio: 9/21) {
+  /* Even smaller padding */
+  .scene-container {
+    padding: 0.5rem !important;
+  }
+
+  /* Stack all panels vertically */
+  .panel-layout {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Full width panels on extreme vertical */
+  .panel-layout > * {
+    width: 100% !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Smaller section headers */
+  .section-header {
+    font-size: 0.875rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Compact buttons */
+  .continue-button {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Reduce grid columns */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Compact scene indicator */
+  .scene-indicator {
+    top: 0.5rem !important;
+    right: 0.5rem !important;
+  }
+
+  .scene-indicator span {
+    font-size: 8px !important;
+  }
+}
+
+/* Utility class for aspect-ratio aware flex direction */
+@media (min-aspect-ratio: 16/9) {
+  /* Wide display: horizontal layout */
+  .aspect-flex {
+    flex-direction: row !important;
+  }
+}
+
+@media (max-aspect-ratio: 9/16) {
+  /* Portrait display: vertical layout */
+  .aspect-flex {
+    flex-direction: column !important;
+  }
+
+  /* Panel widths become full width */
+  .aspect-panel {
+    width: 100% !important;
+  }
+}
+
+/* Scrollable container for vertical displays */
+@media (max-aspect-ratio: 4/3) {
+  .scene-scrollable {
+    overflow-y: auto !important;
+    max-height: 100vh !important;
+  }
+
+  /* Allow content to scroll */
+  .scene-content {
+    min-height: auto !important;
+    height: auto !important;
+  }
+}
