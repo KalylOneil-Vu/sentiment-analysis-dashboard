@@ -3,8 +3,8 @@
  */
 
 export const ENGAGEMENT_PROMPTS = {
-  // Primary engagement detection prompt - OPTIMIZED for keyword extraction
-  PRIMARY: "Describe in 10 words: Is person EXCITED/ENGAGED/HAPPY/SMILING OR bored/distracted/neutral? Specific emotion? Open or closed body language? Leaning forward or back? Eye contact?",
+  // Primary engagement detection prompt - simple direct question
+  PRIMARY: "Describe the person's facial expression and body language in one sentence.",
 
   // Alternative prompts for different aspects
   ATTENTION: "In 15 words: Attention level? Focused or distracted?",
