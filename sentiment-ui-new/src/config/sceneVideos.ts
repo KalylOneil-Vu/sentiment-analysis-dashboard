@@ -10,9 +10,20 @@ export interface SceneVideoConfig {
 }
 
 /**
- * Video configuration for scenes 1-7
- * Scene 0 has no intro video (shows live VisionHUD to attract users)
- * Scene 8 has no intro video (optional Vision HUD demo)
+ * Video configuration for interactive scenes
+ *
+ * Scene Flow:
+ *   0: Attract Loop (no video)
+ *   1: Welcome
+ *   2: Context Slide - Emotion Intelligence (no video)
+ *   3: Analysis
+ *   4: Context Slide - Applied Sentiment (no video)
+ *   5: Retail
+ *   6: Healthcare
+ *   7: High Stress
+ *   8: Sensitivity
+ *   9: Summary
+ *   10: VisionHUD Demo (no video)
  */
 // Sample video for testing (used for all scenes until real videos are added)
 const SAMPLE_VIDEO = '/videos/Rudimentary Multi-Object Tracking Test 1A.mp4'
@@ -25,44 +36,44 @@ export const SCENE_VIDEOS: Record<number, SceneVideoConfig> = {
     title: 'Welcome',
   },
 
-  // Scene 2: Analysis
-  2: {
-    sceneNumber: 2,
+  // Scene 3: Analysis
+  3: {
+    sceneNumber: 3,
     videoUrl: SAMPLE_VIDEO,
     title: 'Analysis',
   },
 
-  // Scene 3a: Retail
-  3: {
-    sceneNumber: 3,
+  // Scene 5: Retail
+  5: {
+    sceneNumber: 5,
     videoUrl: SAMPLE_VIDEO,
     title: 'Retail',
   },
 
-  // Scene 3b: Healthcare
-  4: {
-    sceneNumber: 4,
+  // Scene 6: Healthcare
+  6: {
+    sceneNumber: 6,
     videoUrl: SAMPLE_VIDEO,
     title: 'Healthcare',
   },
 
-  // Scene 3c: High Stress
-  5: {
-    sceneNumber: 5,
+  // Scene 7: High Stress
+  7: {
+    sceneNumber: 7,
     videoUrl: SAMPLE_VIDEO,
     title: 'High Stress',
   },
 
-  // Scene 4: Sensitivity
-  6: {
-    sceneNumber: 6,
+  // Scene 8: Sensitivity
+  8: {
+    sceneNumber: 8,
     videoUrl: SAMPLE_VIDEO,
     title: 'Sensitivity',
   },
 
-  // Scene 5: Summary
-  7: {
-    sceneNumber: 7,
+  // Scene 9: Summary
+  9: {
+    sceneNumber: 9,
     videoUrl: SAMPLE_VIDEO,
     title: 'Summary',
   },

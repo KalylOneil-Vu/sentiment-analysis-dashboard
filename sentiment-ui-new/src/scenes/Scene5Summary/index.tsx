@@ -117,13 +117,24 @@ export function Scene5Summary({ onReplay, onVisionHUD }: Scene5SummaryProps) {
           </div>
         </div>
 
-        {/* Final thank you message */}
-        <div className="mt-8 text-center entrance-animate entrance-delay-5">
+        {/* Closing statement */}
+        <div
+          className="mt-8 pt-6 text-center entrance-animate entrance-delay-5"
+          style={{ borderTop: '1px solid var(--glass-border)' }}
+        >
           <p
-            className="text-xs italic"
-            style={{ color: 'var(--text-faint)' }}
+            className="text-xs tracking-[0.2em] uppercase mb-2"
+            style={{ color: 'var(--accent)' }}
           >
-            Thank you for exploring the future of emotion-aware AI.
+            Responsible Implementation
+          </p>
+          <p
+            className="text-sm leading-relaxed max-w-lg mx-auto"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            Technology is only as good as its deployment. Accenture partners
+            with organizations to implement AI solutions that are both
+            powerful and principled.
           </p>
         </div>
       </div>
