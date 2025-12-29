@@ -115,7 +115,7 @@ function App() {
   }
 
   return (
-    <VisionDetectionProvider autoStart={true} defaultPreset="full">
+    <VisionDetectionProvider autoStart={true} defaultPreset="minimal">
     <div className="w-full h-full relative overflow-hidden">
       {/* Noise texture overlay for premium depth */}
       <div className="noise-overlay" />

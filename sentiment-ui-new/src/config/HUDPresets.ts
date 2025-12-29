@@ -180,13 +180,13 @@ export const HUD_PRESETS: Record<PresetName, HUDPreset> = {
     opacity: 1,
   },
 
-  // Minimal: Just face outline, no labels
+  // Minimal: Just face + bio for emotion detection
   minimal: {
     face: true,
     pose: false,
     hand: false,
     object: false,
-    bio: false,
+    bio: true,  // Needed for face-api emotion detection
     speech: false,
     faceMesh: 'outline',
     showSkeleton: true,
