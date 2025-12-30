@@ -5,9 +5,8 @@ interface BottomInfoProps {
 export function BottomInfo({ povUrl = '#' }: BottomInfoProps) {
   return (
     <div className="space-y-3">
-      <p className="text-xs text-slate-500 leading-relaxed">
-        The model analyzes facial geometry and micro-expressions to estimate
-        emotional state.
+      <p className="text-[10px] text-slate-500 leading-relaxed whitespace-nowrap">
+        AI facial analysis helps understand emotional states in real-time.
       </p>
 
       <a

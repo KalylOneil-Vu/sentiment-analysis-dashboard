@@ -166,7 +166,11 @@ export function VisionDetectionProvider({
   // Auto-start camera on mount if enabled
   useEffect(() => {
     if (autoStart && !isStreaming) {
-      startCamera()
+      // Small delay to ensure video element is mounted
+      const timer = setTimeout(() => {
+        startCamera()
+      }, 100)
+      return () => clearTimeout(timer)
     }
 
     return () => {
@@ -277,10 +281,16 @@ export function VisionDetectionProvider({
 
   return (
     <VisionDetectionContext.Provider value={value}>
-      {/* Hidden video element for shared camera stream */}
+      {/* Video element for shared camera stream (offscreen but full size for proper rendering) */}
       <video
         ref={videoRef}
-        className="hidden"
+        style={{
+          position: 'fixed',
+          top: '-9999px',
+          left: '-9999px',
+          width: '640px',
+          height: '480px',
+        }}
         playsInline
         muted
         autoPlay

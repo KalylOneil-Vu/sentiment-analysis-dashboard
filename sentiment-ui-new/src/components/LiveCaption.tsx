@@ -31,7 +31,7 @@ export function LiveCaption({
 
   return (
     <div
-      className={`relative rounded-xl overflow-hidden ${className}`}
+      className={`relative rounded-xl overflow-hidden flex flex-col flex-1 ${className}`}
       style={{
         background: 'var(--glass-bg)',
         border: '1px solid var(--glass-border)',
@@ -70,7 +70,7 @@ export function LiveCaption({
       {/* Content */}
       <div
         ref={containerRef}
-        className="p-4 min-h-[80px] max-h-[120px] overflow-y-auto"
+        className="p-4 flex-1 min-h-[100px] overflow-y-auto"
       >
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-full gap-2">
@@ -85,20 +85,20 @@ export function LiveCaption({
           </div>
         ) : text ? (
           <p
-            className="text-sm leading-relaxed"
+            className="text-lg leading-relaxed"
             style={{ color: 'var(--text-primary)' }}
           >
             {text}
             {isRunning && (
               <span
-                className="inline-block w-2 h-4 ml-1 animate-pulse"
+                className="inline-block w-2 h-5 ml-1 animate-pulse"
                 style={{ background: 'var(--accent)', verticalAlign: 'text-bottom' }}
               />
             )}
           </p>
         ) : (
           <p
-            className="text-sm italic text-center"
+            className="text-base italic text-center"
             style={{ color: 'var(--text-muted)' }}
           >
             {isRunning ? 'Analyzing...' : 'Analysis paused'}

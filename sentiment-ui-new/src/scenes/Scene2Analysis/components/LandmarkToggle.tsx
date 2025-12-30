@@ -15,7 +15,7 @@ const toggleButtons: { key: keyof LandmarkVisibility; label: string; tooltip: st
 export function LandmarkToggle({ visibility, onToggle }: LandmarkToggleProps) {
   return (
     <div className="space-y-3">
-      <h3 className="text-[10px] tracking-[0.2em] uppercase text-slate-400 font-medium">
+      <h3 className="text-xs tracking-[0.2em] uppercase text-slate-400 font-medium">
         Landmark Toggle
       </h3>
 
@@ -23,7 +23,7 @@ export function LandmarkToggle({ visibility, onToggle }: LandmarkToggleProps) {
         {/* Eye icon (always visible indicator) */}
         <Tooltip content="Toggle eye landmark points">
           <div
-            className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${
+            className={`w-11 h-11 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer ${
               visibility.eyes ? 'landmark-toggle-active' : ''
             }`}
             style={{
@@ -41,7 +41,7 @@ export function LandmarkToggle({ visibility, onToggle }: LandmarkToggleProps) {
             tabIndex={0}
           >
             <svg
-              className={`w-5 h-5 ${
+              className={`w-6 h-6 ${
                 visibility.eyes ? 'text-teal-500' : 'text-slate-400'
               }`}
               fill="none"
@@ -69,7 +69,7 @@ export function LandmarkToggle({ visibility, onToggle }: LandmarkToggleProps) {
           <Tooltip key={key} content={tooltip}>
             <button
               onClick={() => onToggle(key)}
-              className={`px-4 py-2 rounded-lg text-[10px] tracking-[0.15em] font-medium uppercase transition-all duration-200 ${
+              className={`px-5 py-2.5 rounded-lg text-xs tracking-[0.15em] font-medium uppercase transition-all duration-200 ${
                 visibility[key] ? 'landmark-toggle-active' : ''
               }`}
               style={{

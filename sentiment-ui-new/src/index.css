@@ -1254,3 +1254,36 @@ html, body, #root {
     height: auto !important;
   }
 }
+
+/* ============================================
+   MEDIA GALLERY STYLES
+   ============================================ */
+
+/* Gallery fade transition */
+@keyframes gallery-fade {
+  0% { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.gallery-item-enter {
+  animation: gallery-fade 400ms ease-out forwards;
+}
+
+/* Gallery container - responsive for vertical displays */
+.media-gallery {
+  max-height: 50vh;
+}
+
+/* Standard vertical kiosk (9:16) */
+@media (max-aspect-ratio: 9/16) {
+  .media-gallery {
+    max-height: 40vh;
+  }
+}
+
+/* Ultra-vertical kiosk (9:21) */
+@media (max-aspect-ratio: 9/21) {
+  .media-gallery {
+    max-height: 35vh;
+  }
+}

@@ -7,7 +7,7 @@ interface EmotionDisplayProps {
 }
 
 function EmotionIcon({ type, color }: { type: EmotionType; color: string }) {
-  const iconSize = 28
+  const iconSize = 36
 
   // SVG face icons for each emotion
   const icons: Record<EmotionType, JSX.Element> = {
@@ -91,19 +91,19 @@ export function EmotionDisplay({ emotion }: EmotionDisplayProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-[10px] tracking-[0.2em] uppercase text-slate-400 font-medium">
+      <h3 className="text-xs tracking-[0.2em] uppercase text-slate-400 font-medium">
         Primary Emotion
       </h3>
 
       <div
-        className={`flex items-center gap-3 px-4 py-2.5 rounded-full ${isPulsing ? 'value-pulse' : ''}`}
+        className={`flex items-center gap-4 px-5 py-3 rounded-full ${isPulsing ? 'value-pulse' : ''}`}
         style={{
           background: 'rgba(255, 255, 255, 0.6)',
           border: '1px solid rgba(148, 163, 184, 0.2)',
         }}
       >
         {/* Emotion icon with morph transition */}
-        <div className="relative w-7 h-7">
+        <div className="relative w-9 h-9">
           {/* Previous icon (morphing out) */}
           {isMorphing && prevEmotion && (
             <div className="absolute inset-0 icon-morphing-out">
@@ -118,20 +118,20 @@ export function EmotionDisplay({ emotion }: EmotionDisplayProps) {
 
         {/* Emotion label */}
         <span
-          className="text-sm font-semibold tracking-wider uppercase flex-1"
+          className="text-lg font-semibold tracking-wider uppercase flex-1"
           style={{ color: config.color }}
         >
           {emotion.type}
         </span>
 
         {/* Confidence percentage - animated */}
-        <span className="text-sm font-medium text-slate-600">
+        <span className="text-lg font-medium text-slate-600">
           {animatedConfidence}%
         </span>
       </div>
 
       {/* Confidence bar */}
-      <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+      <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-700 ease-out"
           style={{

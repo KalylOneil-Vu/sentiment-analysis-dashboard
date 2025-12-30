@@ -18,6 +18,10 @@ import { ContextSlide } from './components/ContextSlide'
 import { CursorGlow } from './components/CursorGlow'
 import { websocketService } from './services/websocket'
 
+// Featured videos for Context Slides (portrait mode)
+const SCENE_2_VIDEO = '/videos/Rudimentary Multi-Object Tracking Test 1A.mp4'
+const SCENE_4_VIDEO = '/videos/Shoplifting Detection System with YOLO Pose Estimation - How AI Catches Shoplifters Using YOLO.mp4'
+
 // Determine transition type based on scene pair
 function getTransitionType(fromScene: number, toScene: number): TransitionType {
   // Portal effect only for Scene 0 → 1 (system activation)
@@ -192,8 +196,10 @@ function App() {
             <ContextSlide
               title="Emotion Intelligence at Scale"
               onContinue={() => handleSceneChange(3)}
+              featuredVideo={SCENE_2_VIDEO}
+              placeholderCount={3}
             >
-              <p className="mb-6">
+              <p className="mb-4">
                 The human face produces over 10,000 unique expressions—many occurring
                 in fractions of a second, invisible to conscious perception.
               </p>
@@ -218,6 +224,8 @@ function App() {
               title="Applied Sentiment Analysis"
               subtitle="Retail · Healthcare · High-Consequence Environments"
               onContinue={() => handleSceneChange(5)}
+              featuredVideo={SCENE_4_VIDEO}
+              placeholderCount={3}
             >
               <p>
                 Emotion recognition is enhancing organizational

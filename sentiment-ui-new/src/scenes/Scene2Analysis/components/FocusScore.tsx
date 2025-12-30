@@ -8,20 +8,20 @@ export function FocusScore({ score }: FocusScoreProps) {
   const { value: animatedScore } = useAnimatedNumber(score)
 
   // SVG circle parameters
-  const size = 60
-  const strokeWidth = 5
+  const size = 120
+  const strokeWidth = 8
   const radius = (size - strokeWidth) / 2
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (score / 100) * circumference
 
   return (
-    <div className="space-y-2">
-      <h3 className="text-[10px] tracking-[0.2em] uppercase text-slate-400 font-medium">
+    <div className="flex flex-col flex-1">
+      <h3 className="text-xs tracking-[0.2em] uppercase text-slate-400 font-medium mb-2">
         Focus Score
       </h3>
 
       <div
-        className="flex items-center gap-3 px-4 py-2.5 rounded-full"
+        className="flex items-center gap-4 px-5 py-3 rounded-full"
         style={{
           background: 'rgba(255, 255, 255, 0.6)',
           border: '1px solid rgba(148, 163, 184, 0.2)',
@@ -29,7 +29,7 @@ export function FocusScore({ score }: FocusScoreProps) {
       >
         {/* Focus icon */}
         <svg
-          className="w-6 h-6 text-slate-500"
+          className="w-7 h-7 text-slate-500"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -52,11 +52,11 @@ export function FocusScore({ score }: FocusScoreProps) {
         <span className="flex-1" />
 
         {/* Score percentage - animated */}
-        <span className="text-sm font-medium text-slate-600">{animatedScore}%</span>
+        <span className="text-lg font-medium text-slate-600">{animatedScore}%</span>
       </div>
 
       {/* Circular progress (optional visual) */}
-      <div className="flex justify-center mt-1">
+      <div className="flex-1 flex items-center justify-center pt-6">
         <svg width={size} height={size} className="transform -rotate-90">
           {/* Background circle */}
           <circle

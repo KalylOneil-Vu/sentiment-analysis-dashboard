@@ -1,9 +1,8 @@
-import { useRef, RefObject } from 'react'
+import { useRef, useEffect, RefObject } from 'react'
 import { NormalizedLandmark } from '@mediapipe/tasks-vision'
 import { LandmarkVisibility } from '../../../types/emotion'
 import { VisionHUDOverlay } from '../../../components/VisionHUD/VisionHUDOverlay'
-import { useVisionHUD } from '../../../hooks/useVisionHUD'
-import { useWebcam } from '../../../hooks/useWebcam'
+import { useVisionDetection } from '../../../providers/VisionDetectionProvider'
 import { FloatingParticles } from '../../../components/FloatingParticles'
 import { StatusBadge } from '../../../components/StatusBadge'
 import { FrameCounter } from '../../../components/FrameCounter'
@@ -16,23 +15,40 @@ interface CameraPanelProps {
 }
 
 export function CameraPanel({
-  videoRef,
+  videoRef: _videoRef, // unused, using shared vision instead
   landmarks,
   landmarkVisibility,
 }: CameraPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const localVideoRef = useRef<HTMLVideoElement>(null)
 
-  // Use local webcam and vision detection
-  const { isStreaming } = useWebcam(localVideoRef)
-  const { data, config } = useVisionHUD(localVideoRef, isStreaming)
+  // Use shared vision detection from provider
+  const {
+    videoRef,
+    isStreaming,
+    faceLandmarks,
+    poseLandmarks,
+    hands,
+    objects,
+    faceBio,
+    config,
+  } = useVisionDetection()
 
-  const faceDetected = data.faceLandmarks !== null && data.faceLandmarks.length > 0
+  // Clone the video stream to local video element
+  useEffect(() => {
+    if (isStreaming && videoRef.current && localVideoRef.current) {
+      const srcStream = videoRef.current.srcObject as MediaStream
+      if (srcStream) {
+        localVideoRef.current.srcObject = srcStream
+        localVideoRef.current.play().catch(() => {})
+      }
+    }
+  }, [isStreaming, videoRef])
+
+  const faceDetected = faceLandmarks !== null && faceLandmarks.length > 0
 
   return (
     <div className="relative w-full h-full flex flex-col">
-      {/* Hidden video element for this camera */}
-      <video ref={localVideoRef} className="hidden" playsInline muted autoPlay />
 
       {/* Title above camera */}
       <h2
@@ -51,15 +67,25 @@ export function CameraPanel({
           border: '1px solid var(--glass-border)',
         }}
       >
-        {/* VisionHUD Overlay - renders video + all detections */}
+        {/* Direct video feed (mirrored) */}
+        <video
+          ref={localVideoRef}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ transform: 'scaleX(-1)' }}
+          playsInline
+          muted
+          autoPlay
+        />
+
+        {/* VisionHUD Overlay - renders detections on top */}
         <VisionHUDOverlay
-          videoRef={localVideoRef}
-          faceLandmarks={data.faceLandmarks}
-          poseLandmarks={data.poseLandmarks}
-          hands={data.hands}
-          objects={data.objects}
-          faceBio={data.faceBio}
-          config={config}
+          videoRef={videoRef}
+          faceLandmarks={faceLandmarks}
+          poseLandmarks={poseLandmarks}
+          hands={hands}
+          objects={objects}
+          faceBio={faceBio}
+          config={{ ...config, showSkeleton: true }}
         />
 
         {/* Light leak overlay */}
