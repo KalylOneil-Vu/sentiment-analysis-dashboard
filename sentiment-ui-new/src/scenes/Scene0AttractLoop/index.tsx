@@ -207,10 +207,10 @@ export function Scene0AttractLoop({ onAdvance, isExiting = false }: Scene0Props)
         <ThemeToggle />
       </div>
 
-      {/* VisionHUD Component - compact camera panel for vertical displays */}
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-start pt-[30%]">
+      {/* VisionHUD Component - large camera panel for vertical displays */}
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4">
         <div
-          className={`relative w-[90%] max-w-xs aspect-[5/8] rounded-xl overflow-hidden transition-all duration-700 ease-in-out ${
+          className={`relative w-full h-[75vh] max-w-[90vw] rounded-2xl overflow-hidden transition-all duration-700 ease-in-out ${
             isExiting ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
           }`}
           style={{

@@ -77,13 +77,13 @@ export function CompactCamera({
           >
             {matchResult.score}%
           </span>
-          <span className="text-sm font-medium text-slate-600">Match</span>
+          <span className="text-xl font-medium text-slate-600">Match</span>
         </div>
-        <p className="text-xs text-slate-500 leading-tight mt-1">
+        <p className="text-base text-slate-500 leading-tight mt-1">
           {matchResult.label}
         </p>
         {isAutoAdvancing && (
-          <p className="text-[10px] text-amber-600 mt-1 animate-pulse">
+          <p className="text-sm text-amber-600 mt-1 animate-pulse">
             Auto-advancing...
           </p>
         )}

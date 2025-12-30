@@ -13,14 +13,33 @@ import { Scene4Sensitivity } from './scenes/Scene4Sensitivity'
 import { Scene5Summary } from './scenes/Scene5Summary'
 import { SceneVisionHUD } from './scenes/SceneVisionHUD'
 import { SceneTransition, TransitionType, getBlurScaleClass } from './components/SceneTransition'
-import { SceneWithIntro } from './components/SceneWithIntro'
 import { ContextSlide } from './components/ContextSlide'
 import { CursorGlow } from './components/CursorGlow'
 import { websocketService } from './services/websocket'
 
 // Featured videos for Context Slides (portrait mode)
-const SCENE_2_VIDEO = '/videos/Rudimentary Multi-Object Tracking Test 1A.mp4'
-const SCENE_4_VIDEO = '/videos/Shoplifting Detection System with YOLO Pose Estimation - How AI Catches Shoplifters Using YOLO.mp4'
+const SCENE_2_VIDEO = '/videos/a-professional-woman-uses-facial-recognition-tech-2025-12-17-21-41-17-utc.mov'
+const SCENE_4_VIDEO = '/videos/hospital-ai-detection.mp4'
+
+// Gallery videos for first context slide
+const SCENE_2_GALLERY: (string | { src: string; scale?: number; position?: string })[] = [
+  '/videos/LandmarkDetection.mp4',
+  '/videos/a-reflective-person-in-an-urban-setting-dressed-in-2025-12-17-22-01-30-utc.mov',
+  '/videos/LandmarkDetection2.mp4',
+  '/videos/MultiFaceDetection.mp4',
+  { src: '/videos/Quality 4.mp4', scale: 1.2, position: '30% center' },
+  '/videos/MultiFaceDetection2.mp4',
+]
+
+// Gallery videos for second context slide
+const SCENE_4_GALLERY: (string | { src: string; scale?: number; position?: string })[] = [
+  '/videos/a-police-officer-armed-with-a-firearm.mov',
+  '/videos/clients-shopping-for-trendy-merchandise-2025-12-17-13-24-48-utc.mov',
+  '/videos/callcenter.mp4',
+  '/videos/firefighters.mp4',
+  '/videos/patient-in-room.mp4',
+  '/videos/traffic-control-room.mov',
+]
 
 // Determine transition type based on scene pair
 function getTransitionType(fromScene: number, toScene: number): TransitionType {
@@ -185,9 +204,7 @@ function App() {
         )}
         {displayedScene === 1 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <SceneWithIntro sceneNumber={1}>
-              <Scene1Welcome onBegin={() => handleSceneChange(2)} />
-            </SceneWithIntro>
+            <Scene1Welcome onBegin={() => handleSceneChange(2)} />
           </div>
         )}
         {/* Context Slide 1: Emotion Intelligence at Scale */}
@@ -198,6 +215,7 @@ function App() {
               onContinue={() => handleSceneChange(3)}
               featuredVideo={SCENE_2_VIDEO}
               placeholderCount={3}
+              galleryVideos={SCENE_2_GALLERY}
             >
               <p className="mb-4">
                 The human face produces over 10,000 unique expressions—many occurring
@@ -212,9 +230,7 @@ function App() {
         )}
         {displayedScene === 3 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <SceneWithIntro sceneNumber={3}>
-              <Scene2Analysis onContinue={() => handleSceneChange(4)} />
-            </SceneWithIntro>
+            <Scene2Analysis onContinue={() => handleSceneChange(4)} />
           </div>
         )}
         {/* Context Slide 2: Applied Sentiment Analysis */}
@@ -226,6 +242,7 @@ function App() {
               onContinue={() => handleSceneChange(5)}
               featuredVideo={SCENE_4_VIDEO}
               placeholderCount={3}
+              galleryVideos={SCENE_4_GALLERY}
             >
               <p>
                 Emotion recognition is enhancing organizational
@@ -236,40 +253,30 @@ function App() {
         )}
         {displayedScene === 5 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <SceneWithIntro sceneNumber={5}>
-              <Scene3aRetail onContinue={() => handleSceneChange(6)} />
-            </SceneWithIntro>
+            <Scene3aRetail onContinue={() => handleSceneChange(6)} />
           </div>
         )}
         {displayedScene === 6 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <SceneWithIntro sceneNumber={6}>
-              <Scene3bHealthcare onContinue={() => handleSceneChange(7)} />
-            </SceneWithIntro>
+            <Scene3bHealthcare onContinue={() => handleSceneChange(7)} />
           </div>
         )}
         {displayedScene === 7 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <SceneWithIntro sceneNumber={7}>
-              <Scene3cHighStress onContinue={() => handleSceneChange(8)} />
-            </SceneWithIntro>
+            <Scene3cHighStress onContinue={() => handleSceneChange(8)} />
           </div>
         )}
         {displayedScene === 8 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <SceneWithIntro sceneNumber={8}>
-              <Scene4Sensitivity onContinue={() => handleSceneChange(9)} />
-            </SceneWithIntro>
+            <Scene4Sensitivity onContinue={() => handleSceneChange(9)} />
           </div>
         )}
         {displayedScene === 9 && (
           <div className={`w-full h-full ${getRevealClass()} ${blurScaleClass}`}>
-            <SceneWithIntro sceneNumber={9}>
-              <Scene5Summary
-                onReplay={() => handleSceneChange(0)}
-                onVisionHUD={() => handleSceneChange(10)}
-              />
-            </SceneWithIntro>
+            <Scene5Summary
+              onReplay={() => handleSceneChange(0)}
+              onVisionHUD={() => handleSceneChange(10)}
+            />
           </div>
         )}
         {displayedScene === 10 && (

@@ -7,8 +7,7 @@ interface ProductGridProps {
 }
 
 // Small product icon based on category
-function SmallProductIcon({ category }: { category: string }) {
-  const size = 24
+function SmallProductIcon({ category, size = 20 }: { category: string; size?: number }) {
 
   const icons: Record<string, JSX.Element> = {
     Bags: (
@@ -57,8 +56,14 @@ export function ProductGrid({
   selectedIndex,
   onSelectProduct,
 }: ProductGridProps) {
+  // Calculate rows needed (4 columns)
+  const rows = Math.ceil(products.length / 4)
+
   return (
-    <div className="grid grid-cols-4 gap-2">
+    <div
+      className="grid grid-cols-4 gap-2 w-full h-full"
+      style={{ gridTemplateRows: `repeat(${rows}, 1fr)` }}
+    >
       {products.map((product, index) => {
         const isSelected = index === selectedIndex
 
@@ -67,28 +72,28 @@ export function ProductGrid({
             key={product.id}
             onClick={() => onSelectProduct(index)}
             className={`
-              relative aspect-square rounded-lg p-2 flex items-center justify-center
-              transition-all duration-200 hover-lift stagger-item
+              relative rounded-lg flex items-center justify-center
+              transition-all duration-200 hover:scale-[1.02] active:scale-95
               ${isSelected ? 'ring-2 ring-teal-500 ring-offset-2' : ''}
             `}
             style={{
               background: isSelected
-                ? 'rgba(20, 184, 166, 0.1)'
+                ? 'rgba(20, 184, 166, 0.15)'
                 : 'rgba(241, 245, 249, 0.8)',
               border: `1px solid ${
-                isSelected ? 'rgba(20, 184, 166, 0.4)' : 'rgba(148, 163, 184, 0.2)'
+                isSelected ? 'rgba(20, 184, 166, 0.5)' : 'rgba(148, 163, 184, 0.2)'
               }`,
             }}
             title={product.name}
           >
             <div className={`${isSelected ? 'text-teal-600' : 'text-slate-400'}`}>
-              <SmallProductIcon category={product.category} />
+              <SmallProductIcon category={product.category} size={24} />
             </div>
 
             {/* Selection indicator dot */}
             {isSelected && (
               <div
-                className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-teal-500 rounded-full"
+                className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-teal-500 rounded-full"
                 style={{ boxShadow: '0 0 4px rgba(20, 184, 166, 0.5)' }}
               />
             )}
